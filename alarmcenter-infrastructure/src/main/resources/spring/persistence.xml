@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd"
+       default-autowire="byName">
+    <bean id="configMongoUri" class="com.mongodb.MongoClientURI">
+        <constructor-arg value="${mongo.config.uri}"></constructor-arg>
+    </bean>
+    <bean id="configMongoClient" class="com.mongodb.MongoClient">
+        <constructor-arg ref="configMongoUri"></constructor-arg>
+    </bean>
+
+    <bean id="logMongoUri" class="com.mongodb.MongoClientURI">
+        <constructor-arg value="${mongo.log.uri}"></constructor-arg>
+    </bean>
+    <bean id="logMongoClient" class="com.mongodb.MongoClient">
+        <constructor-arg ref="logMongoUri"></constructor-arg>
+    </bean>
+
+    <bean id="notifyMongoUri" class="com.mongodb.MongoClientURI">
+        <constructor-arg value="${mongo.notify.uri}"></constructor-arg>
+    </bean>
+    <bean id="notifyMongoClient" class="com.mongodb.MongoClient">
+        <constructor-arg ref="notifyMongoUri"></constructor-arg>
+    </bean>
+</beans>
