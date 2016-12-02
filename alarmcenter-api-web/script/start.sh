@@ -3,7 +3,7 @@
 source "/etc/profile"
 GCLOGPATH="logs/gc.log"
 MAIN_CLASS="com.ymatou.alarmcenter.api.web.WebApplication"
-APP_NAME="alarm.ymatou.com"
+APP_NAME="alarm.iapi.ymatou.com"
 CLASS_PATH="conf:lib/*"
 JAVA_OPTS=" -server \
             -Xms4096m -Xmx4096m \

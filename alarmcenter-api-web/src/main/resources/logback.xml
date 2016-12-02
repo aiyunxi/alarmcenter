@@ -3,7 +3,7 @@
     <property name="pattern"
               value="%date [%thread] %-5level %logger{40} KEY[%X{logPrefix}] - %msg%n" />
     <!--<property name="baseDir" value="/usr/local/log/counter.iapi.ymatou.com" />-->
-    <property name="baseDir" value="D:\\logfiles\\alarm.ymatou.com" />
+    <property name="baseDir" value="D:\\logfiles\\alarm.iapi.matou.com" />
     <property name="level" value="info" />
     <property name="charset" value="UTF-8" />
     <property name="immediateFlush" value="true" />
@@ -59,7 +59,7 @@
         <appender-ref ref="DEFAULT-APPENDER" />
     </appender>
 
-    <logger name="alarm.ymatou.com" additivity="false">
+    <logger name="alarm.iapi.ymatou.com" additivity="false">
         <level value="${level}" />
         <appender-ref ref="ASYNC-DEFAULT-APPENDER" />
         <appender-ref ref="ASYNC-ERROR-APPENDER" />

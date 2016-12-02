@@ -3,7 +3,7 @@
 source "/etc/profile"
 GCLOGPATH="logs/gc.log"
 MAIN_CLASS="com.ymatou.alarmcenter.task.Application"
-APP_NAME="task.alarm.ymatou.com"
+APP_NAME="alarmtask"
 CLASS_PATH="conf:lib/*"
 JAVA_OPTS=" -server \
             -Xms4096m -Xmx4096m \

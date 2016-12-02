@@ -170,7 +170,7 @@ public class ErrorLogService {
             sbTitle.append("出现").append(appErrorLevel.getMessage()).append("错误").append(errorCount);
             sbTitle.append("个，请查看邮件--错误告警系统");
             sendSmsAddress = sendSmsAddress.replace(";", ",");
-            smsService.SendMessage("alarm.ymatou.com", sendSmsAddress, sbTitle.toString());
+            smsService.SendMessage("alarm.iapi.ymatou.com", sendSmsAddress, sbTitle.toString());
         } catch (Exception ex) {
             exception = ex;
         } finally {
