@@ -5,12 +5,11 @@
     <parent>
         <artifactId>alarmcenter</artifactId>
         <groupId>com.ymatou.alarmcenter</groupId>
-        <version>1.0-SNAPSHOT</version>
+        <version>1.0.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <description>计数服务API实现</description>
     <artifactId>alarmcenter-facade-impl</artifactId>
-    <version>${alarmcenter.version}</version>
     <dependencies>
         <dependency>
             <groupId>com.ymatou.alarmcenter</groupId>
