@@ -98,4 +98,8 @@ public class AppErrorLogRepository extends MongoRepository {
         return query.order("-AddTimeStamp").limit(100).asList();
     }
 
+    public void deleteDatabse(String dbName) {
+        getMongoClient().dropDatabase(dbName);
+    }
+
 }

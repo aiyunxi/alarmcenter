@@ -30,7 +30,7 @@ public class AlarmResourceImpl implements AlarmResource {
 
 
     @POST
-    @Produces({"application/x-www-form-urlencoded; charset=UTF-8"})
+    //@Produces({"application/x-www-form-urlencoded; charset=UTF-8"})
     @Consumes({MediaType.APPLICATION_FORM_URLENCODED})
     //@Path("/Alarm/SaveSingle")
     @Path("/{Alarm:(?i:Alarm)}/{SaveSingle:(?i:SaveSingle)}")
