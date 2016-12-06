@@ -43,7 +43,7 @@ public class ErrorLogService {
 //    private String counter = "Alarm";
 //    private String appId = "Alarm";
 
-    @Async
+    //@Async
     public void saveAppErrLog(AppErrorLog appErrLog) {
         if (appErrLog == null)
             return;
