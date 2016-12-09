@@ -43,7 +43,7 @@ public class ScheduledTaskService {
     /**
      * 每月的15号执行删除上一个月数据库
      */
-    @Scheduled(cron = "0 0 0 15 * ? *")
+    @Scheduled(cron = "0 0 0 15 * ? ")
     public void deleteDatabase() {
         try {
             DateTime dt = new DateTime();
