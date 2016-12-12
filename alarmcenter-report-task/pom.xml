@@ -23,6 +23,17 @@
     <build>
         <plugins>
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <excludes>
+                        <exclude>**/*.properties</exclude>   <!--排除一些不需要打包的class文件，此处是排除aboutjar包下的所有class文件-->
+                        <exclude>**/logback*.xml</exclude>
+                        <exclude>**/applicationContext.xml</exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
+            <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <executions>  <!--执行器 mvn assembly:assembly -->
                     <execution>
