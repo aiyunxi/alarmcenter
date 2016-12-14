@@ -6,7 +6,7 @@ import org.mongodb.morphia.annotations.*;
 /**
  * Created by zhangxiaoming on 2016/11/23.
  */
-@Entity(value = "AppBaseConfig")
+@Entity(value = "AppBaseConfig",noClassnameStored = true)
 public class AppBaseConfig {
     @Id
     private ObjectId id;

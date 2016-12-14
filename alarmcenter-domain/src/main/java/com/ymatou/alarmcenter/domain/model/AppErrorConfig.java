@@ -8,7 +8,7 @@ import java.util.Date;
 /**
  * Created by zhangxiaoming on 2016/11/24.
  */
-@Entity(value = "AppErrorConfig")
+@Entity(value = "AppErrorConfig",noClassnameStored = true)
 //@Indexes(
 //        @Index(value = "AppId", fields = @Field("AppId"), unique = true, background = true)
 //)

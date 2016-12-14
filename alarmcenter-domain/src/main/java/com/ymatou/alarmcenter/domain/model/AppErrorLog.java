@@ -12,7 +12,7 @@ import org.mongodb.morphia.annotations.*;
 //@Indexes({
 //        @Index(fields = @Field("AppId"), options = @IndexOptions(background = true))
 //})
-@Entity(value = "AppErrLog")
+@Entity(value = "AppErrLog",noClassnameStored = true)
 public class AppErrorLog {
     @Id
     private ObjectId id;

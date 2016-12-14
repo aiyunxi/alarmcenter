@@ -8,7 +8,7 @@ import org.mongodb.morphia.annotations.Property;
 /**
  * Created by zhangxiaoming on 2016/11/23.
  */
-@Entity(value = "NofityRecord")//兼容之前的错误单词
+@Entity(value = "NofityRecord", noClassnameStored = true)//兼容之前的错误单词
 public class NotifyRecord {
     @Id
     private ObjectId id;
