@@ -17,6 +17,7 @@
         <module>alarmcenter-facade-impl</module>
         <module>alarmcenter-facade-model</module>
         <module>alarmcenter-report-task</module>
+        <module>alarmcenter-admin-web</module>
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

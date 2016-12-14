@@ -1,17 +1,34 @@
 package com.ymatou.alarmcenter.facade.rest;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ymatou.alarmcenter.domain.service.ErrorLogService;
 import com.ymatou.alarmcenter.facade.AlarmFacade;
+import com.ymatou.alarmcenter.facade.common.FacadeAspect;
 import com.ymatou.alarmcenter.facade.enums.AppErrorLevel;
 import com.ymatou.alarmcenter.facade.model.SaveSingleRequest;
 import com.ymatou.alarmcenter.facade.model.SaveSingleResponse;
+import com.ymatou.alarmcenter.facade.rest.model.SaveBatchResponse;
 import com.ymatou.alarmcenter.facade.rest.model.SaveSingleFormRequest;
+import com.ymatou.alarmcenter.infrastructure.config.CustomObjectMapper;
+import org.apache.commons.io.Charsets;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.jboss.resteasy.annotations.Form;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
-import javax.ws.rs.*;
+import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by zhangxiaoming on 2016/11/23.
@@ -21,7 +38,7 @@ import javax.ws.rs.core.MediaType;
 @Produces({"application/json; charset=UTF-8"})
 @Consumes({MediaType.APPLICATION_JSON})
 public class AlarmResourceImpl implements AlarmResource {
-
+    private static final Logger logger = LoggerFactory.getLogger(FacadeAspect.class);
     @Resource
     private AlarmFacade alarmFacade;
 
@@ -53,5 +70,52 @@ public class AlarmResourceImpl implements AlarmResource {
         return alarmFacade.saveSingle(saveSingleRequest);
     }
 
+    @POST
+    //@Produces({"application/x-www-form-urlencoded; charset=UTF-8"})
+    //@Consumes({MediaType.APPLICATION_FORM_URLENCODED})
+    //@Path("/Alarm/SaveBatch")
+    @Path("/{Alarm:(?i:Alarm)}/{SaveBatch:(?i:SaveBatch)}")
+    @Override
+    public SaveBatchResponse saveBatch(@Context HttpServletRequest servletRequest) {
+        SaveBatchResponse response = new SaveBatchResponse();
+        response.setStatus(0);
+        try {
+            String value = getHttpBody(servletRequest);
+            if (StringUtils.isBlank(value))
+                return response;
+            ObjectMapper mapper = new CustomObjectMapper();
+            List<SaveSingleFormRequest> list = mapper.readValue(value, ArrayList.class);
+            if (list != null) {
+                for (SaveSingleFormRequest item : list) {
+                    if (item == null)
+                        continue;
+                    try {
+                        saveSingle(item);
+                    } catch (Exception e) {
+                        logger.error(e.getMessage(), e);
+                    }
+                }
+            }
+        } catch (Exception ex) {
+            logger.error(ex.getMessage(), ex);
+        }
+        return response;
+    }
+
+    /**
+     * 获取到HTTP Body
+     *
+     * @param servletRequest
+     * @return
+     */
+    private String getHttpBody(HttpServletRequest servletRequest) {
+        try {
+            InputStream is = servletRequest.getInputStream();
+            return IOUtils.toString(is, Charsets.UTF_8);
+        } catch (Exception e) {
+            logger.error("getHttpBody", e);
+        }
+        return null;
+    }
 
 }
