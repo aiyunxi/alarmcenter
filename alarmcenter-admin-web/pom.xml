@@ -31,8 +31,8 @@
         </dependency>
 
         <dependency>
-            <groupId>com.ymatou.rpcservice</groupId>
-            <artifactId>rpcservice-domain</artifactId>
+            <groupId>com.ymatou.alarmcenter</groupId>
+            <artifactId>alarmcenter-domain</artifactId>
         </dependency>
 
     </dependencies>
