@@ -98,9 +98,11 @@ public class ErrorLogService {
     private void errorHandler(AppErrorConfig appErrorConfig) {
         if (appErrorConfig == null)
             return;
+        appErrorConfig.setAppId(appErrorConfig.getAppId().toLowerCase());
         AppBaseConfig appBaseConfig = appBaseConfigRepository.getAppBaseConfigByAppId(appErrorConfig.getAppId());
         if (appBaseConfig == null)
             return;
+        appBaseConfig.setAppId(appBaseConfig.getAppId().toLowerCase());
         smsHandler(appBaseConfig, appErrorConfig);
         emailHandler(appBaseConfig, appErrorConfig);
     }

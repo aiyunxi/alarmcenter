@@ -50,7 +50,7 @@ public class AlarmResourceImpl implements AlarmResource {
     @Override
     public SaveSingleResponse saveSingle(@Form SaveSingleFormRequest request) {
         SaveSingleRequest saveSingleRequest = new SaveSingleRequest();
-        saveSingleRequest.setAppId(request.getAppId());
+        saveSingleRequest.setAppId(request.getAppId().toLowerCase());
         saveSingleRequest.setMessage(request.getMessage());
         saveSingleRequest.setAddTime(request.getAddTime());
         saveSingleRequest.setAssemblyName(request.getAssemblyName());
