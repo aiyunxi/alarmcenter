@@ -1,5 +1,6 @@
 package com.ymatou.alarmcenter.facade.rest;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ymatou.alarmcenter.domain.service.ErrorLogService;
 import com.ymatou.alarmcenter.facade.AlarmFacade;
@@ -7,11 +8,10 @@ import com.ymatou.alarmcenter.facade.common.FacadeAspect;
 import com.ymatou.alarmcenter.facade.enums.AppErrorLevel;
 import com.ymatou.alarmcenter.facade.model.SaveSingleRequest;
 import com.ymatou.alarmcenter.facade.model.SaveSingleResponse;
+import com.ymatou.alarmcenter.facade.rest.model.SaveBatchRequest;
 import com.ymatou.alarmcenter.facade.rest.model.SaveBatchResponse;
 import com.ymatou.alarmcenter.facade.rest.model.SaveSingleFormRequest;
 import com.ymatou.alarmcenter.infrastructure.config.CustomObjectMapper;
-import org.apache.commons.io.Charsets;
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jboss.resteasy.annotations.Form;
 import org.slf4j.Logger;
@@ -19,15 +19,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
-import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -71,20 +67,20 @@ public class AlarmResourceImpl implements AlarmResource {
     }
 
     @POST
-    //@Produces({"application/x-www-form-urlencoded; charset=UTF-8"})
-    //@Consumes({MediaType.APPLICATION_FORM_URLENCODED})
     //@Path("/Alarm/SaveBatch")
     @Path("/{Alarm:(?i:Alarm)}/{SaveBatch:(?i:SaveBatch)}")
-    @Override
-    public SaveBatchResponse saveBatch(@Context HttpServletRequest servletRequest) {
+    @Consumes({MediaType.APPLICATION_FORM_URLENCODED})
+    public SaveBatchResponse saveBatch(@Form SaveBatchRequest request) {
         SaveBatchResponse response = new SaveBatchResponse();
         response.setStatus(0);
+        if (request == null)
+            return response;
         try {
-            String value = getHttpBody(servletRequest);
+            String value = request.getError();
             if (StringUtils.isBlank(value))
                 return response;
             ObjectMapper mapper = new CustomObjectMapper();
-            List<SaveSingleFormRequest> list = mapper.readValue(value, ArrayList.class);
+            List<SaveSingleFormRequest> list = mapper.readValue(value,  new TypeReference<List<SaveSingleFormRequest>>() {});
             if (list != null) {
                 for (SaveSingleFormRequest item : list) {
                     if (item == null)
@@ -100,22 +96,6 @@ public class AlarmResourceImpl implements AlarmResource {
             logger.error(ex.getMessage(), ex);
         }
         return response;
-    }
-
-    /**
-     * 获取到HTTP Body
-     *
-     * @param servletRequest
-     * @return
-     */
-    private String getHttpBody(HttpServletRequest servletRequest) {
-        try {
-            InputStream is = servletRequest.getInputStream();
-            return IOUtils.toString(is, Charsets.UTF_8);
-        } catch (Exception e) {
-            logger.error("getHttpBody", e);
-        }
-        return null;
     }
 
 }

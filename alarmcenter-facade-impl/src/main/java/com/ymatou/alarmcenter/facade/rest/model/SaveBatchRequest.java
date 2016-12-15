@@ -1,20 +1,22 @@
 package com.ymatou.alarmcenter.facade.rest.model;
 
-import org.jboss.resteasy.annotations.Body;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import javax.ws.rs.FormParam;
 
 /**
  * Created by zhangxiaoming on 2016/12/13.
  */
 public class SaveBatchRequest {
+    @FormParam("Error")
+    @JsonProperty("Error")
+    private String error;
 
-    @Body
-    private String value;
-
-    public String getValue() {
-        return value;
+    public String getError() {
+        return error;
     }
 
-    public void setValue(String value) {
-        this.value = value;
+    public void setError(String error) {
+        this.error = error;
     }
 }
