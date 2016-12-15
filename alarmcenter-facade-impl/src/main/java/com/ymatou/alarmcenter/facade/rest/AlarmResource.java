@@ -12,4 +12,6 @@ public interface AlarmResource {
     SaveSingleResponse saveSingle(SaveSingleFormRequest request);
 
     SaveBatchResponse saveBatch(SaveBatchRequest request);
+
+    SaveSingleResponse saveSingleJson(SaveSingleFormRequest request);
 }

@@ -22,10 +22,10 @@ var Login = function () {
 
 	            messages: {
 	                username: {
-	                    required: "Username is required."
+	                    required: "用户名是必须的"
 	                },
 	                password: {
-	                    required: "Password is required."
+	                    required: "密码是必须的"
 	                }
 	            },
 
@@ -75,7 +75,7 @@ var Login = function () {
 
 	            messages: {
 	                email: {
-	                    required: "Email is required."
+	                    required: "邮箱是必须的"
 	                }
 	            },
 
@@ -147,7 +147,7 @@ var Login = function () {
 
 	            messages: { // custom messages for radio buttons and checkboxes
 	                tnc: {
-	                    required: "Please accept TNC first."
+	                    required: "请先同意接受条款"
 	                }
 	            },
 

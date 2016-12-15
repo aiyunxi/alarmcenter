@@ -41,6 +41,15 @@ public class AlarmResourceImpl implements AlarmResource {
     @Resource
     private ErrorLogService errorLogService;
 
+    @POST
+    //@Path("/Alarm/SaveSingle")
+    @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    @Path("/{Alarm:(?i:Alarm)}/{SaveSingle:(?i:SaveSingle)}")
+    @Override
+    public SaveSingleResponse saveSingleJson(SaveSingleFormRequest request) {
+        return saveSingle(request);
+    }
+
 
     @POST
     //@Produces({"application/x-www-form-urlencoded; charset=UTF-8"})
@@ -69,7 +78,7 @@ public class AlarmResourceImpl implements AlarmResource {
     @POST
     //@Path("/Alarm/SaveBatch")
     @Path("/{Alarm:(?i:Alarm)}/{SaveBatch:(?i:SaveBatch)}")
-    @Consumes({MediaType.APPLICATION_FORM_URLENCODED})
+    @Consumes({MediaType.APPLICATION_FORM_URLENCODED, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     public SaveBatchResponse saveBatch(@Form SaveBatchRequest request) {
         SaveBatchResponse response = new SaveBatchResponse();
         response.setStatus(0);
@@ -80,7 +89,8 @@ public class AlarmResourceImpl implements AlarmResource {
             if (StringUtils.isBlank(value))
                 return response;
             ObjectMapper mapper = new CustomObjectMapper();
-            List<SaveSingleFormRequest> list = mapper.readValue(value,  new TypeReference<List<SaveSingleFormRequest>>() {});
+            List<SaveSingleFormRequest> list = mapper.readValue(value, new TypeReference<List<SaveSingleFormRequest>>() {
+            });
             if (list != null) {
                 for (SaveSingleFormRequest item : list) {
                     if (item == null)
