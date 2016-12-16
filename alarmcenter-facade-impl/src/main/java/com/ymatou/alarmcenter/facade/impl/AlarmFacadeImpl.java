@@ -5,9 +5,12 @@ import com.ymatou.alarmcenter.domain.service.ErrorLogService;
 import com.ymatou.alarmcenter.facade.AlarmFacade;
 import com.ymatou.alarmcenter.facade.model.SaveSingleRequest;
 import com.ymatou.alarmcenter.facade.model.SaveSingleResponse;
+import org.joda.time.DateTime;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
+
+import static com.ymatou.alarmcenter.infrastructure.common.Utils.getTimeStamp;
 
 /**
  * Created by zhangxiaoming on 2016/11/23.
@@ -39,7 +42,7 @@ public class AlarmFacadeImpl implements AlarmFacade {
         appErrLog.setStackTrace(request.getStackTrace());
         appErrLog.setAddTime(request.getAddTime());
         appErrLog.setMachineIp(request.getMachineIp());
-        appErrLog.setRecordTimeStamp(System.currentTimeMillis());
+        appErrLog.setRecordTimeStamp(getTimeStamp(new DateTime()));
         errorLogService.saveAppErrLog(appErrLog);
         response.setResult(true);
         return response;

@@ -17,6 +17,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import static com.ymatou.alarmcenter.infrastructure.common.Utils.getTimeStamp;
+
 /**
  * Created by zhangxiaoming on 2016/11/23.
  */
@@ -78,11 +80,12 @@ public class AppErrorLogRepository extends MongoRepository {
     public long getErrorCount(String dbName, String collectionName, String appId, int errorLevel, Date beginTime, Date endTime) {
         Query<AppErrorLog> query = newQuery(AppErrorLog.class, dbName, collectionName, ReadPreference.primaryPreferred());
         DateTime dt = new DateTime(beginTime);
-        long begin = new DateTime(dt.getYear(), dt.getMonthOfYear(), dt.getDayOfMonth(), dt.getHourOfDay(), dt.getMinuteOfHour(), dt.getSecondOfMinute()).getMillis();
-        long end = new DateTime(endTime).getMillis();
+        long begin = getTimeStamp(new DateTime(dt.getYear(), dt.getMonthOfYear(), dt.getDayOfMonth(), dt.getHourOfDay(), dt.getMinuteOfHour(), dt.getSecondOfMinute()));
+        long end = getTimeStamp(new DateTime(endTime));
+
         query.field("AppId").equal(appId).field("ErrorLevel").equal(errorLevel)
-                .field("AddTimeStamp").greaterThanOrEq(begin)
-                .field("AddTimeStamp").lessThan(end);
+                .field("AddTimeStamp").greaterThan(begin)
+                .field("AddTimeStamp").lessThanOrEq(end);
         long totalRecords = getDatastore(dbName).getCount(query);
         return totalRecords;
     }
@@ -90,11 +93,11 @@ public class AppErrorLogRepository extends MongoRepository {
     public List<AppErrorLog> getErrorList(String dbName, String collectionName, String appId, int errorLevel, Date beginTime, Date endTime) {
         Query<AppErrorLog> query = newQuery(AppErrorLog.class, dbName, collectionName, ReadPreference.primaryPreferred());
         DateTime dt = new DateTime(beginTime);
-        long begin = new DateTime(dt.getYear(), dt.getMonthOfYear(), dt.getDayOfMonth(), dt.getHourOfDay(), dt.getMinuteOfHour(), dt.getSecondOfMinute()).getMillis();
-        long end = new DateTime(endTime).getMillis();
+        long begin = getTimeStamp(new DateTime(dt.getYear(), dt.getMonthOfYear(), dt.getDayOfMonth(), dt.getHourOfDay(), dt.getMinuteOfHour(), dt.getSecondOfMinute()));
+        long end = getTimeStamp(new DateTime(endTime));
         query.field("AppId").equal(appId).field("ErrorLevel").equal(errorLevel)
-                .field("AddTimeStamp").greaterThanOrEq(begin)
-                .field("AddTimeStamp").lessThan(end);
+                .field("AddTimeStamp").greaterThan(begin)
+                .field("AddTimeStamp").lessThanOrEq(end);
         return query.order("-AddTimeStamp").limit(100).asList();
     }
 

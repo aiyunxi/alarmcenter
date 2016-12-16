@@ -6,6 +6,8 @@ import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.mongodb.morphia.annotations.*;
 
+import static com.ymatou.alarmcenter.infrastructure.common.Utils.getTimeStamp;
+
 /**
  * Created by zhangxiaoming on 2016/11/23.
  */
@@ -159,7 +161,7 @@ public class AppErrorLog {
     public void setAddTime(String addTime) {
         this.addTime = addTime;
         DateTime dt = getAddTimeToDateTime();
-        this.addTimeStamp = dt.getMillis() / 1000;
+        this.addTimeStamp = getTimeStamp(dt);
         this.addTime = dt.toString("yyyy-MM-dd HH:mm:ss");
     }
 

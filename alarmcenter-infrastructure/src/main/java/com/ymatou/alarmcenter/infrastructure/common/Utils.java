@@ -16,4 +16,8 @@ public class Utils {
         long millis = (ticks - 621355968000000000L) / 10000 - 8 * 3600 * 1000;
         return new DateTime(millis);
     }
+
+    public static long getTimeStamp(DateTime dateTime){
+        return dateTime.getMillis()/1000;
+    }
 }

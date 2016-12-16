@@ -13,6 +13,8 @@ import javax.annotation.Resource;
 import java.util.List;
 import java.util.UUID;
 
+import static com.ymatou.alarmcenter.infrastructure.common.Utils.getTimeStamp;
+
 /**
  * Created by zhangxiaoming on 2016/11/28.
  */
@@ -42,8 +44,9 @@ public class AppErrorLogRepositoryTest extends BaseTest {
             appErrorLog.setTitle("test");
             appErrorLog.setErrorLevel(AppErrorLevel.Error.getCode());
             appErrorLog.setAddTime(dt.toString("yyyy-MM-dd HH:mm:ss"));
-            appErrorLog.setRecordTimeStamp(System.currentTimeMillis());
+            appErrorLog.setRecordTimeStamp(getTimeStamp(dt));
             appErrorLogRepository.saveAppErrLog(appErrorLog);
+            //System.out.println(String.format("id:%s,timestamp:%s", appErrorLog.getId(), appErrorLog.getAddTimeStamp()));
         }
         String dbName = appErrorLogRepository.getDatabaseName(dt.toDate());
         String collectionName = appErrorLogRepository.getCollectionName(dt.toDate());
