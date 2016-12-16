@@ -18,7 +18,6 @@ public class FacadeAspect {
     @AfterThrowing(pointcut = "allFacade()", throwing = "ex")
     public void doAfterThrowing(Throwable ex) {
         logger.error(ex.getMessage(), ex);
-
     }
 
     @Pointcut("execution(* com.ymatou.alarmcenter.facade.*Facade.*(..))")

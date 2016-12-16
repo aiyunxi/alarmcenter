@@ -42,6 +42,7 @@
         <property name="locations">
             <list>
                 <value>application.properties</value>
+                <value>whitelist.properties</value>
             </list>
         </property>
     </bean>

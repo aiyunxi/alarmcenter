@@ -1,6 +1,7 @@
 package com.ymatou.alarmcenter.domain.service;
 
 import com.ymatou.alarmcenter.domain.config.BusinessConfig;
+import com.ymatou.alarmcenter.domain.config.WhitelistConfig;
 import com.ymatou.alarmcenter.domain.model.AppBaseConfig;
 import com.ymatou.alarmcenter.domain.model.AppErrorConfig;
 import com.ymatou.alarmcenter.domain.model.AppErrorLog;
@@ -12,6 +13,8 @@ import com.ymatou.alarmcenter.domain.repository.NotifyRecordRepository;
 import com.ymatou.alarmcenter.facade.enums.AppErrorLevel;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
@@ -40,6 +43,9 @@ public class ErrorLogService {
     @Resource
     private SmsService smsService;
 
+    @Resource
+    private WhitelistConfig whitelistConfig;
+    private static final Logger logger = LoggerFactory.getLogger(ErrorLogService.class);
 //    private String counter = "Alarm";
 //    private String appId = "Alarm";
 
@@ -47,7 +53,36 @@ public class ErrorLogService {
     public void saveAppErrLog(AppErrorLog appErrLog) {
         if (appErrLog == null)
             return;
+        boolean flag = isInWhitelist(appErrLog.getAppId(), appErrLog.getTitle(), appErrLog.getMessage());
+        if (flag)
+            return;
         appErrLogRepository.saveAppErrLog(appErrLog);
+    }
+
+    private boolean isInWhitelist(String appId, String title, String message) {
+        try {
+            String content = title + message;
+            if (StringUtils.isBlank(appId) || StringUtils.isBlank(content))
+                return false;
+            String words = whitelistConfig.getValue(appId);
+            if (StringUtils.isBlank(words))
+                return false;
+            String[] array = StringUtils.split(words, ",");
+            if (array == null || array.length <= 0)
+                return false;
+            for (int i = 0; i < array.length; i++) {
+                String word = array[i];
+                if (StringUtils.isBlank(word))
+                    continue;
+                if (content.contains(word))
+                    return true;
+            }
+            return false;
+        } catch (Exception ex) {
+            logger.warn(ex.getMessage(), ex);
+            return false;
+        }
+
     }
 
 //    private void setCounter(AppErrorLog appErrLog) {

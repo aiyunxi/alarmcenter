@@ -1,5 +1,6 @@
 package com.ymatou.alarmcenter.domain.model;
 
+import org.apache.commons.lang3.StringUtils;
 import org.bson.types.ObjectId;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
@@ -12,7 +13,7 @@ import org.mongodb.morphia.annotations.*;
 //@Indexes({
 //        @Index(fields = @Field("AppId"), options = @IndexOptions(background = true))
 //})
-@Entity(value = "AppErrLog",noClassnameStored = true)
+@Entity(value = "AppErrLog", noClassnameStored = true)
 public class AppErrorLog {
     @Id
     private ObjectId id;
@@ -157,7 +158,9 @@ public class AppErrorLog {
 
     public void setAddTime(String addTime) {
         this.addTime = addTime;
-        this.addTimeStamp= getAddTimeToDateTime().getMillis();
+        DateTime dt = getAddTimeToDateTime();
+        this.addTimeStamp = dt.getMillis();
+        this.addTime = dt.toString("yyyy-MM-dd HH:mm:ss");
     }
 
     public String getMachineIp() {
@@ -193,11 +196,28 @@ public class AppErrorLog {
     }
 
     public DateTime getAddTimeToDateTime() {
-        DateTime dt = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss").parseDateTime(getAddTime());
+        DateTime dt = new DateTime();
+        try {
+            dt = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss").parseDateTime(getAddTime());
+        } catch (Exception ex1) {
+            try {
+                dt = DateTime.parse(getAddTime());
+            } catch (Exception ex2) {
+                try {
+                    String str = getAddTime();
+                    if (!StringUtils.isBlank(str)) {
+                        str = str.replace("T", " ");
+                        String[] array = StringUtils.split(str, ".");
+                        str = array[0];
+                        dt = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss").parseDateTime(str);
+                    }
+                } catch (Exception ex3) {
+                    dt = new DateTime();
+                }
+            }
+        }
         return dt;
     }
-
-
 
 
 }
