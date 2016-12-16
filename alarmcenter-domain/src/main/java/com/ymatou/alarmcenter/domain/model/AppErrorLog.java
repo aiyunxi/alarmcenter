@@ -159,7 +159,7 @@ public class AppErrorLog {
     public void setAddTime(String addTime) {
         this.addTime = addTime;
         DateTime dt = getAddTimeToDateTime();
-        this.addTimeStamp = dt.getMillis();
+        this.addTimeStamp = dt.getMillis() / 1000;
         this.addTime = dt.toString("yyyy-MM-dd HH:mm:ss");
     }
 

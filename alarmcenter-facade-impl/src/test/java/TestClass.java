@@ -1,4 +1,5 @@
 import org.joda.time.DateTime;
+import org.junit.Test;
 
 import java.io.IOException;
 
@@ -24,9 +25,16 @@ public class TestClass {
 //
 //        List<SaveSingleFormRequest> list1 = mapper.readValue(json, ArrayList.class);
         //String str1="2016-12-16 02:28:11";
-        String str2 ="2016-09-20 16:17:22.693000";
-        DateTime dt = DateTime.parse(str2);
+        //String str2 ="2016-09-20 16:17:22.693000";
+        //DateTime dt = DateTime.parse(str2);
         //DateTime dt = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss").parseDateTime(str1);
 
+    }
+
+    @Test
+    public void test2() {
+        DateTime dt = new DateTime(2016, 12, 16, 16, 19, 31);
+        Long time = dt.getMillis();
+        System.out.println(time);
     }
 }
