@@ -2,8 +2,8 @@
 <configuration>
     <property name="pattern"
               value="%date [%thread] %-5level %logger{40} KEY[%X{logPrefix}] - %msg%n"/>
-    <property name="baseDir" value="/usr/local/log/alarm.iapi.ymatou.com"/>
-    <!--<property name="baseDir" value="D:\\logfiles\\alarm.iapi.matou.com" />-->
+    <!--<property name="baseDir" value="/usr/local/log/alarm.iapi.ymatou.com"/>-->
+    <property name="baseDir" value="D:\\logfiles\\alarm.iapi.matou.com" />
     <property name="level" value="info"/>
     <property name="charset" value="UTF-8"/>
     <property name="immediateFlush" value="true"/>

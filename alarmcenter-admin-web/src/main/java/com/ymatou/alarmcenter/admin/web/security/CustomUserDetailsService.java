@@ -29,7 +29,7 @@ public class CustomUserDetailsService implements UserDetailsService {
             throw new UsernameNotFoundException("LoginId " + userName + " not found");
         }
         return new org.springframework.security.core.userdetails.User(
-                user.getEmail(),
+                user.getLoginId(),
                 user.getPassword(),
                 getAuthorities(user)
         );

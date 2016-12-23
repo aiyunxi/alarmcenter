@@ -17,6 +17,13 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.thymeleaf.dialect.IDialect;
+import org.thymeleaf.extras.springsecurity4.dialect.SpringSecurityDialect;
+import org.thymeleaf.spring4.SpringTemplateEngine;
+import org.thymeleaf.templateresolver.TemplateResolver;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Configuration
 @EnableWebSecurity
@@ -44,22 +51,37 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/image/**", "/js/**", "/css/**", "/media/**").permitAll()
-                .antMatchers("/", "/version", "/warmup").permitAll()
+                .antMatchers("/version", "/warmup", "/account/**").permitAll()
                 .antMatchers("/admin/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
                 .loginPage("/account/login")
-                .defaultSuccessUrl("/home")
+                .defaultSuccessUrl("/")
                 .failureUrl("/account/login?error")
                 .permitAll()
                 .and()
                 .logout()
                 .logoutRequestMatcher(new AntPathRequestMatcher("/account/logout"))
-                .logoutSuccessUrl("/home")
+                .logoutSuccessUrl("/account/login")
                 .permitAll()
                 .and()
-                .exceptionHandling().accessDeniedPage("/403");
+                .exceptionHandling().accessDeniedPage("/403")
+                .and()
+                .rememberMe()
+                .tokenValiditySeconds(604800)
+                .rememberMeParameter("remember")
+                .rememberMeCookieName("remember");
+
+
+    }
+
+    @Bean
+    public SpringTemplateEngine templateEngine(TemplateResolver templateResolver) {
+        SpringTemplateEngine engine = new SpringTemplateEngine();
+        engine.setTemplateResolver(templateResolver);
+        engine.addDialect(new SpringSecurityDialect());
+        return engine;
     }
 
 }

@@ -31,7 +31,7 @@ public class OperatorRepository extends MongoRepository implements InitializingB
 
     @Override
     public void afterPropertiesSet() throws Exception {
-
+        getDatastore(dbName).ensureIndex(Operator.class, null, "LoginId", true, false);
     }
 
     public void saveOperator(Operator operator) {

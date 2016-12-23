@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  */
 @Controller
 public class HomeController {
-    @RequestMapping({"/default", "/home", "/index"})
+    @RequestMapping({"/", "/default", "/home", "/index"})
     public String home(Model model) {
         return "/home/index";
     }

@@ -15,7 +15,7 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
  * Created by zhangxiaoming on 2016/11/21.
  */
 @Configuration
-@ComponentScan(basePackages = "com.ymatou.rpcservice.admin.web.controller", useDefaultFilters = false,
+@ComponentScan(basePackages = "com.ymatou.alarmcenter.admin.web.controller", useDefaultFilters = false,
         includeFilters = {
                 @ComponentScan.Filter(type = FilterType.ANNOTATION, value = Controller.class),
                 @ComponentScan.Filter(type = FilterType.ANNOTATION, value = RestController.class)

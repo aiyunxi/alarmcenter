@@ -15,6 +15,7 @@ public class Operator {
     @Property("Id")
     private String id;
 
+
     @Property("LoginId")
     private String loginId;
 
