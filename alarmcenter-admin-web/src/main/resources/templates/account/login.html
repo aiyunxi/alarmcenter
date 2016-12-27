@@ -1,124 +1,62 @@
 <!DOCTYPE html>
-<!--[if IE 8]>
-<html lang="en" class="ie8" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"> <![endif]-->
-<!--[if IE 9]>
-<html lang="en" class="ie9" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"> <![endif]-->
-<!--[if !IE]><!-->
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"> <!--<![endif]-->
-<!-- BEGIN HEAD -->
+<html lang="en" class="body-full-height">
 <head>
-    <meta charset="utf-8"/>
-    <title>Metronic | Login Page</title>
-    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-    <meta content="" name="description"/>
-    <meta content="" name="author"/>
-    <!-- BEGIN GLOBAL MANDATORY STYLES -->
-    <link href="/media/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
-    <link href="/media/css/bootstrap-responsive.min.css" rel="stylesheet" type="text/css"/>
-    <link href="/media/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
-    <link href="/media/css/style-metro.css" rel="stylesheet" type="text/css"/>
-    <link href="/media/css/style.css" rel="stylesheet" type="text/css"/>
-    <link href="/media/css/style-responsive.css" rel="stylesheet" type="text/css"/>
-    <link href="/media/css/default.css" rel="stylesheet" type="text/css" id="style_color"/>
-    <link href="/media/css/uniform.default.css" rel="stylesheet" type="text/css"/>
-    <!-- END GLOBAL MANDATORY STYLES -->
-    <!-- BEGIN PAGE LEVEL STYLES -->
-    <link href="/media/css/login.css" rel="stylesheet" type="text/css"/>
-    <!-- END PAGE LEVEL STYLES -->
-    <link rel="shortcut icon" href="/media/image/favicon.ico"/>
-</head>
-<!-- END HEAD -->
-<!-- BEGIN BODY -->
-<body class="login">
-<!-- BEGIN LOGO -->
-<div class="logo">
-    <!--<img src="/media/image/logo-big.png" alt=""/>-->
-</div>
-<!-- END LOGO -->
-<!-- BEGIN LOGIN -->
-<div class="content">
-    <!-- BEGIN LOGIN FORM -->
-    <form class="form-vertical login-form" action="/account/login" method="post" role="form">
-        <h3 class="form-title">用户登录</h3>
-        <div class="alert alert-error hide">
-            <button class="close" data-dismiss="alert"></button>
-            <span>请输入您的用户名和密码!</span>
-        </div>
-        <div class="control-group">
-            <!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
-            <label class="control-label visible-ie8 visible-ie9">用户名</label>
-            <div class="controls">
-                <div class="input-icon left">
-                    <i class="icon-user"></i>
-                    <input class="m-wrap placeholder-no-fix" type="text" placeholder="用户名" name="username"
-                           id="username"/>
-                </div>
-            </div>
-        </div>
-        <div class="control-group">
-            <label class="control-label visible-ie8 visible-ie9">密码</label>
-            <div class="controls">
-                <div class="input-icon left">
-                    <i class="icon-lock"></i>
-                    <input class="m-wrap placeholder-no-fix" type="password" placeholder="密码" name="password"
-                           id="password"/>
-                </div>
-            </div>
-        </div>
-        <div class="form-actions">
-            <label class="checkbox">
-                <input type="checkbox" id="remember" name="remember" value="1"/>记住我
-            </label>
-            <button type="submit" class="btn green pull-right">
-                登录 <i class="m-icon-swapright m-icon-white"></i>
-            </button>
-        </div>
+    <!-- META SECTION -->
+    <title>Atlant - Responsive Bootstrap Admin Template</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
 
-        <div th:if="${#httpServletRequest.getParameter('error')!=null}" class="alert alert-danger" role="alert">
-            您输入的用户名或密码有误！
+    <link rel="icon" href="favicon.ico" type="image/x-icon"/>
+    <!-- END META SECTION -->
+
+    <!-- CSS INCLUDE -->
+    <link rel="stylesheet" type="text/css" id="theme" href="/css/theme-default.css"/>
+    <!-- EOF CSS INCLUDE -->
+</head>
+<body>
+
+<div class="login-container">
+
+    <div class="login-box animated fadeInDown">
+        <!--<div class="login-logo"></div>-->
+        <div class="login-body"  style="margin-top: 100px;">
+            <div class="login-title">欢迎登录异常报警系统</div>
+            <form action="/account/login" class="form-horizontal" method="post">
+                <div class="form-group">
+                    <div class="col-md-12">
+                        <input type="text" class="form-control" placeholder="用户名" name="username"
+                               id="username"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-12">
+                        <input type="password" class="form-control" placeholder="密码" name="password"
+                               id="password"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-6">
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" id="remember" name="remember" value="1"/>记住我
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <button type="submit" class="btn btn-info btn-block">登录</button>
+                    </div>
+                </div>
+            </form>
         </div>
-    </form>
+        <div class="login-footer">
+            <div class="pull-left">
+                &copy; 2016 YMT
+            </div>
+        </div>
+    </div>
+
 </div>
-<!-- END LOGIN -->
-<!-- BEGIN COPYRIGHT -->
-<div class="copyright">
-    2016 &copy; YMT
-</div>
-<!-- END COPYRIGHT -->
-<!-- BEGIN JAVASCRIPTS(Load javascripts at bottom, this will reduce page load time) -->
-<!-- BEGIN CORE PLUGINS -->
-<script src="/media/js/jquery-1.10.1.min.js" type="text/javascript"></script>
-<script src="/media/js/jquery-migrate-1.2.1.min.js" type="text/javascript"></script>
-<!-- IMPORTANT! Load jquery-ui-1.10.1.custom.min.js before bootstrap.min.js to fix bootstrap tooltip conflict with jquery ui tooltip -->
-<script src="/media/js/jquery-ui-1.10.1.custom.min.js" type="text/javascript"></script>
-<script src="/media/js/bootstrap.min.js" type="text/javascript"></script>
-<!--[if lt IE 9]>
-<script src="/media/js/excanvas.min.js"></script>
-<script src="/media/js/respond.min.js"></script>
-<![endif]-->
-<script src="/media/js/jquery.slimscroll.min.js" type="text/javascript"></script>
-<script src="/media/js/jquery.blockui.min.js" type="text/javascript"></script>
-<script src="/media/js/jquery.cookie.min.js" type="text/javascript"></script>
-<script src="/media/js/jquery.uniform.min.js" type="text/javascript"></script>
-<!-- END CORE PLUGINS -->
-<!-- BEGIN PAGE LEVEL PLUGINS -->
-<script src="/media/js/jquery.validate.min.js" type="text/javascript"></script>
-<!-- END PAGE LEVEL PLUGINS -->
-<!-- BEGIN PAGE LEVEL SCRIPTS -->
-<script src="/media/js/app.js" type="text/javascript"></script>
-<script src="/media/js/login.js" type="text/javascript"></script>
-<!-- END PAGE LEVEL SCRIPTS -->
-<script>
-    jQuery(document).ready(function () {
-        App.init();
-        Login.init();
-    });
-</script>
-<!-- END JAVASCRIPTS -->
 
 </body>
-<!-- END BODY -->
 </html>

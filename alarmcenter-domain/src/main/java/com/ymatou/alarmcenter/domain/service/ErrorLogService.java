@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.util.Date;
 import java.util.List;
+import java.util.ResourceBundle;
 
 /**
  * Created by zhangxiaoming on 2016/11/23.
@@ -46,8 +47,6 @@ public class ErrorLogService {
     @Resource
     private WhitelistConfig whitelistConfig;
     private static final Logger logger = LoggerFactory.getLogger(ErrorLogService.class);
-//    private String counter = "Alarm";
-//    private String appId = "Alarm";
 
     //@Async
     public void saveAppErrLog(AppErrorLog appErrLog) {
@@ -85,34 +84,6 @@ public class ErrorLogService {
 
     }
 
-//    private void setCounter(AppErrorLog appErrLog) {
-//        if (appErrLog == null)
-//            return;
-//        String targetId = appErrLog.getAppId() + appErrLog.getErrorLevel();
-//        SetNaturalCounterRequest request = new SetNaturalCounterRequest();
-//        request.setAppId(appId);
-//        request.setCounter(counter);
-//        request.setTargetid(targetId);
-//        request.setDateTime(appErrLog.getCreateTime());
-//        request.setAction(CounterAction.Increase);
-//        CounterClient.setNaturalCounter(request);
-//    }
-//
-//    public long getAppErrorCountFromCounterService(String appId, int errorLevel, Date beginTime, Date endTime) {
-//        if (StringUtils.isBlank(appId))
-//            return 0;
-//        String targetId = appId + errorLevel;
-//        GetNaturalCounterListRequest request = new GetNaturalCounterListRequest();
-//        request.setAppId(appId);
-//        request.setCounter(counter);
-//        request.setTargetId(targetId);
-//        request.setStartTime(beginTime);
-//        request.setEndTime(endTime);
-//        GetNaturalCounterListResponse response = CounterClient.getNaturalCounterList(request);
-//        return response.getValue();
-//    }
-
-
     public long getAppErrorCount(String appId, int errorLevel, Date beginTime, Date endTime) {
         if (StringUtils.isBlank(appId))
             return 0;
@@ -122,6 +93,16 @@ public class ErrorLogService {
     }
 
     public void errorHandler() {
+        try {
+            ResourceBundle disconf = ResourceBundle.getBundle("disconf");
+            String env = disconf == null ? "" : disconf.getString("env");
+            logger.debug("env:" + env + ",running");
+            if (StringUtils.equalsIgnoreCase("STG", env))
+                return;
+        } catch (Exception ex) {
+            logger.error("errorHandler,ResourceBundle", ex);
+        }
+
         List<AppErrorConfig> list = appErrorConfigRepository.getAppErrorConfigList();
         if (list == null || list.size() <= 0)
             return;
@@ -138,12 +119,27 @@ public class ErrorLogService {
         if (appBaseConfig == null)
             return;
         appBaseConfig.setAppId(appBaseConfig.getAppId().toLowerCase());
-        smsHandler(appBaseConfig, appErrorConfig);
-        emailHandler(appBaseConfig, appErrorConfig);
+        smsHandlerForError(appBaseConfig, appErrorConfig);
+        emailHandlerForError(appBaseConfig, appErrorConfig);
+        fatalHandler(appBaseConfig, appErrorConfig);
     }
 
     @Async
-    private void smsHandler(AppBaseConfig appBaseConfig, AppErrorConfig appErrorConfig) {
+    private void fatalHandler(AppBaseConfig appBaseConfig, AppErrorConfig appErrorConfig) {
+        if (appBaseConfig == null || appErrorConfig == null)
+            return;
+        DateTime beginTime = new DateTime().minusMinutes(1);
+        DateTime endTime = new DateTime();
+        long fatalCount = getAppErrorCount(appBaseConfig.getAppId(), AppErrorLevel.Fatal.getCode(), beginTime.toDate(), endTime.toDate());
+        if (fatalCount <= 0)
+            return;
+        sendEmail(appBaseConfig.getAppId(), appBaseConfig.getEmailTo(), fatalCount, AppErrorLevel.Fatal, beginTime.toDate(), endTime.toDate());
+        sendSms(appBaseConfig.getAppId(), appBaseConfig.getPhoneNumber(), fatalCount, AppErrorLevel.Fatal, beginTime.toDate(), endTime.toDate());
+    }
+
+
+    @Async
+    private void smsHandlerForError(AppBaseConfig appBaseConfig, AppErrorConfig appErrorConfig) {
         if (appBaseConfig == null || appErrorConfig == null)
             return;
         int sendSmsTimeInterval = appErrorConfig.getSendSmsTimeInterval() <= 0 ? businessConfig.getDefaultSendSmsNumLimit() : appErrorConfig.getSendSmsTimeInterval();
@@ -169,7 +165,7 @@ public class ErrorLogService {
     }
 
     @Async
-    private void emailHandler(AppBaseConfig appBaseConfig, AppErrorConfig appErrorConfig) {
+    private void emailHandlerForError(AppBaseConfig appBaseConfig, AppErrorConfig appErrorConfig) {
         if (appBaseConfig == null || appErrorConfig == null)
             return;
         int intSendEmailTimeInterval = appErrorConfig.getSendEmailTimeInterval() <= 0 ? businessConfig.getDefaultSendEmailTimeInterval() : appErrorConfig.getSendEmailTimeInterval();
@@ -210,6 +206,7 @@ public class ErrorLogService {
             smsService.SendMessage("alarm.iapi.ymatou.com", sendSmsAddress, sbTitle.toString());
         } catch (Exception ex) {
             exception = ex;
+            logger.error("sendSmsError", ex);
         } finally {
             saveNotifyRecordInfo(appId, sbTitle.toString(), sendSmsAddress, 2, exception);
         }
@@ -254,6 +251,7 @@ public class ErrorLogService {
             emailService.sendHtmlMail(sendMailAddress, sbTitle.toString().replace("<br/>", ""), sbBody.toString());
         } catch (Exception ex) {
             exception = ex;
+            logger.error("sendEmailError", ex);
         } finally {
             saveNotifyRecordInfo(appId, sbTitle.toString(), sendMailAddress, 1, exception);
         }

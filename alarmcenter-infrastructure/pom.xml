@@ -99,10 +99,6 @@
             <artifactId>performancemonitorclient</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.ymatou.counter.client</groupId>
-            <artifactId>counter-client</artifactId>
-        </dependency>
-        <dependency>
             <groupId>com.ymatou.disconf</groupId>
             <artifactId>disconf-client</artifactId>
         </dependency>
