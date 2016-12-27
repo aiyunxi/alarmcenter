@@ -21,7 +21,6 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.util.Date;
 import java.util.List;
-import java.util.ResourceBundle;
 
 /**
  * Created by zhangxiaoming on 2016/11/23.
@@ -93,16 +92,6 @@ public class ErrorLogService {
     }
 
     public void errorHandler() {
-        try {
-            ResourceBundle disconf = ResourceBundle.getBundle("disconf");
-            String env = disconf == null ? "" : disconf.getString("env");
-            logger.debug("env:" + env + ",running");
-            if (StringUtils.equalsIgnoreCase("STG", env))
-                return;
-        } catch (Exception ex) {
-            logger.error("errorHandler,ResourceBundle", ex);
-        }
-
         List<AppErrorConfig> list = appErrorConfigRepository.getAppErrorConfigList();
         if (list == null || list.size() <= 0)
             return;

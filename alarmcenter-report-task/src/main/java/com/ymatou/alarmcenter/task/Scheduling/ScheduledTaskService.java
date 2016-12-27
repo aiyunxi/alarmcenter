@@ -2,6 +2,7 @@ package com.ymatou.alarmcenter.task.Scheduling;
 
 import com.ymatou.alarmcenter.domain.repository.AppErrorLogRepository;
 import com.ymatou.alarmcenter.domain.service.ErrorLogService;
+import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,13 +10,14 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.ResourceBundle;
 
 /**
  * Created by zhangxiaoming on 2016/11/29.
  */
 @Service
 public class ScheduledTaskService {
-    private static final Logger Logger = LoggerFactory.getLogger(ScheduledTaskService.class);
+    private static final Logger logger = LoggerFactory.getLogger(ScheduledTaskService.class);
     @Resource
     private ErrorLogService errorLogService;
 
@@ -33,10 +35,18 @@ public class ScheduledTaskService {
     @Scheduled(fixedRate = 6000)
     public void work() {
         try {
-            errorLogService.errorHandler();
-            Logger.debug("job working!");
+            ResourceBundle disconf = ResourceBundle.getBundle("disconf");
+            String env = disconf == null ? "" : disconf.getString("env");
+            logger.debug("env:" + env + ",job running");
+            if (StringUtils.equalsIgnoreCase("STG", env))
+                return;
         } catch (Exception ex) {
-            Logger.error("job work error:", ex);
+            logger.error("errorHandler,ResourceBundle", ex);
+        }
+        try {
+            errorLogService.errorHandler();
+        } catch (Exception ex) {
+            logger.error("job work error:", ex);
         }
     }
 
@@ -50,10 +60,10 @@ public class ScheduledTaskService {
             dt.minusMonths(1);
             String dbName = appErrorLogRepository.getDatabaseName(dt.toDate());
             appErrorLogRepository.deleteDatabse(dbName);
-            Logger.debug("job deleteDatabase:" + dbName);
+            logger.debug("job deleteDatabase:" + dbName);
 
         } catch (Exception ex) {
-            Logger.error("job deleteDatabase error:", ex);
+            logger.error("job deleteDatabase error:", ex);
         }
     }
 }
