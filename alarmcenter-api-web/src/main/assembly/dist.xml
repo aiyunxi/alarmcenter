@@ -13,6 +13,7 @@
             <!-- 过滤 -->
             <excludes>
                 <exclude>**/*.properties</exclude>
+                <exclude>**/logback-test.xml</exclude>
             </excludes>
             <outputDirectory>conf</outputDirectory>
         </fileSet>
