@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class HomeController {
     @RequestMapping({"/", "/default", "/home", "/index"})
     public String home(Model model) {
+        //throw new RuntimeException("test error");
         return "/home/index";
     }
 }

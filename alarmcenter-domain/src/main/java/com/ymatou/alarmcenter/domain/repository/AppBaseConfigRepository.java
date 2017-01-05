@@ -3,15 +3,18 @@ package com.ymatou.alarmcenter.domain.repository;
 import com.mongodb.MongoClient;
 import com.mongodb.ReadPreference;
 import com.ymatou.alarmcenter.domain.model.AppBaseConfig;
+import com.ymatou.alarmcenter.domain.model.PagingQueryResult;
 import com.ymatou.alarmcenter.infrastructure.db.mongodb.MongoRepository;
 import org.apache.commons.lang3.StringUtils;
 import org.bson.conversions.Bson;
 import org.mongodb.morphia.Datastore;
+import org.mongodb.morphia.query.Criteria;
 import org.mongodb.morphia.query.Query;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.mongodb.client.model.Filters.eq;
@@ -69,6 +72,26 @@ public class AppBaseConfigRepository extends MongoRepository implements Initiali
         return datastore.find(AppBaseConfig.class).asList();
     }
 
+    public PagingQueryResult<AppBaseConfig> getAppBaseConfigList(String appId, int pageSize, int pageIndex) {
+        if (pageIndex < 1)
+            pageIndex = 1;
+        Query<AppBaseConfig> query = newQuery(AppBaseConfig.class, dbName, "AppBaseConfig", ReadPreference.secondaryPreferred());
+        ArrayList<Criteria> conditions = new ArrayList<>();
+        if (!StringUtils.isBlank(appId))
+            conditions.add(query.criteria("AppId").equal(appId));
+        int size = conditions.size();
+        Criteria[] array = conditions.toArray(new Criteria[size]);
+        query.and(array);
+        long totalRecords = getDatastore(dbName).getCount(query);
+        query.order("-LastUpdateDatetime");
+        List<AppBaseConfig> list = query.offset(pageSize * (pageIndex - 1)).limit(pageSize).asList();
+        if (list == null)
+            list = new ArrayList<>();
+        PagingQueryResult<AppBaseConfig> result = new PagingQueryResult<>();
+        result.setList(list);
+        result.setTotalRecords(totalRecords);
+        return result;
+    }
 
     @Override
     public void afterPropertiesSet() throws Exception {

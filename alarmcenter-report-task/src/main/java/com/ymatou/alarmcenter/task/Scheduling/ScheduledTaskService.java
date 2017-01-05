@@ -37,7 +37,7 @@ public class ScheduledTaskService {
         try {
             ResourceBundle disconf = ResourceBundle.getBundle("disconf");
             String env = disconf == null ? "" : disconf.getString("env");
-            logger.debug("env:" + env + ",job running");
+            logger.info("env:" + env + ",job running");
             if (StringUtils.equalsIgnoreCase("STG", env))
                 return;
         } catch (Exception ex) {
@@ -60,7 +60,7 @@ public class ScheduledTaskService {
             dt.minusMonths(1);
             String dbName = appErrorLogRepository.getDatabaseName(dt.toDate());
             appErrorLogRepository.deleteDatabse(dbName);
-            logger.debug("job deleteDatabase:" + dbName);
+            logger.info("job deleteDatabase:" + dbName);
 
         } catch (Exception ex) {
             logger.error("job deleteDatabase error:", ex);

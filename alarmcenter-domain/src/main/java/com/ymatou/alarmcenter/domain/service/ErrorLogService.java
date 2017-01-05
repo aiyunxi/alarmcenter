@@ -47,7 +47,7 @@ public class ErrorLogService {
     private WhitelistConfig whitelistConfig;
     private static final Logger logger = LoggerFactory.getLogger(ErrorLogService.class);
 
-    //@Async
+
     public void saveAppErrLog(AppErrorLog appErrLog) {
         if (appErrLog == null)
             return;
@@ -113,7 +113,7 @@ public class ErrorLogService {
         fatalHandler(appBaseConfig, appErrorConfig);
     }
 
-    @Async
+
     private void fatalHandler(AppBaseConfig appBaseConfig, AppErrorConfig appErrorConfig) {
         if (appBaseConfig == null || appErrorConfig == null)
             return;
@@ -127,7 +127,6 @@ public class ErrorLogService {
     }
 
 
-    @Async
     private void smsHandlerForError(AppBaseConfig appBaseConfig, AppErrorConfig appErrorConfig) {
         if (appBaseConfig == null || appErrorConfig == null)
             return;
@@ -143,17 +142,17 @@ public class ErrorLogService {
             if (errorCount >= intSendSmsNumLimit) {
                 sendSms(appBaseConfig.getAppId(), appBaseConfig.getPhoneNumber(), errorCount, AppErrorLevel.Error, beginTime.toDate(), endTime.toDate());
                 appErrorConfigRepository.updateLastSmsHandleTime(appBaseConfig.getAppId());
-                System.out.println(String.format("appId:%s,send sms!", appBaseConfig.getAppId()));
+                logger.debug(String.format("appId:%s,send sms!", appBaseConfig.getAppId()));
             } else {
-                System.out.println(String.format("appId:%s,send sms!,当前异常数 %s 小于设置值 %s，不发送！", appBaseConfig.getAppId(), errorCount
+                logger.debug(String.format("appId:%s,send sms!,当前异常数 %s 小于设置值 %s，不发送！", appBaseConfig.getAppId(), errorCount
                         , intSendSmsNumLimit));
             }
         } else {
-            System.out.println(String.format("appId:%s,send sms!,当前时间小于发送间隔，不发送！", appBaseConfig.getAppId()));
+            logger.debug(String.format("appId:%s,send sms!,当前时间小于发送间隔，不发送！", appBaseConfig.getAppId()));
         }
     }
 
-    @Async
+
     private void emailHandlerForError(AppBaseConfig appBaseConfig, AppErrorConfig appErrorConfig) {
         if (appBaseConfig == null || appErrorConfig == null)
             return;
@@ -167,19 +166,19 @@ public class ErrorLogService {
             DateTime endTime = currentTime;
             long errorCount = getAppErrorCount(appBaseConfig.getAppId(), AppErrorLevel.Error.getCode(), beginTime.toDate(), endTime.toDate());
             if (errorCount >= intSendEmailNumLimit) {
-
                 sendEmail(appBaseConfig.getAppId(), appBaseConfig.getEmailTo(), errorCount, AppErrorLevel.Error, beginTime.toDate(), endTime.toDate());
                 appErrorConfigRepository.updateLastEmailHandleTime(appBaseConfig.getAppId());
-                System.out.println(String.format("appId:%s,send email!", appBaseConfig.getAppId()));
+                logger.debug(String.format("appId:%s,send email!", appBaseConfig.getAppId()));
             } else {
-                System.out.println(String.format("appId:%s,send email!,当前异常数 %s 小于设置值 %s，不发送！", appBaseConfig.getAppId(), errorCount
+                logger.debug(String.format("appId:%s,send email!,当前异常数 %s 小于设置值 %s，不发送！", appBaseConfig.getAppId(), errorCount
                         , intSendEmailNumLimit));
             }
         } else {
-            System.out.println(String.format("appId:%s,send email!,当前时间小于发送间隔，不发送！", appBaseConfig.getAppId()));
+            logger.debug(String.format("appId:%s,send email!,当前时间小于发送间隔，不发送！", appBaseConfig.getAppId()));
         }
     }
 
+    @Async
     public void sendSms(String appId, String sendSmsAddress, long errorCount, AppErrorLevel appErrorLevel, Date beginTime, Date endTime) {
         if (StringUtils.isBlank(appId) || StringUtils.isBlank(sendSmsAddress) || errorCount <= 0)
             return;
@@ -201,6 +200,7 @@ public class ErrorLogService {
         }
     }
 
+    @Async
     public void sendEmail(String appId, String sendMailAddress, long errorCount, AppErrorLevel appErrorLevel, Date beginTime, Date endTime) {
         if (StringUtils.isBlank(appId) || StringUtils.isBlank((sendMailAddress)))
             return;

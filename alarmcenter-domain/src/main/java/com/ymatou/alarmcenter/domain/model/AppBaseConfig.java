@@ -3,6 +3,8 @@ package com.ymatou.alarmcenter.domain.model;
 import org.bson.types.ObjectId;
 import org.mongodb.morphia.annotations.*;
 
+import java.util.Date;
+
 /**
  * Created by zhangxiaoming on 2016/11/23.
  */
@@ -18,7 +20,7 @@ public class AppBaseConfig {
     @Property("PhoneNumber")
     private String phoneNumber;
     @Property("LastUpdateDatetime")
-    private String lastUpdateDatetime;
+    private Date lastUpdateDatetime;
 
     public ObjectId getId() {
         return id;
@@ -52,11 +54,11 @@ public class AppBaseConfig {
         this.phoneNumber = phoneNumber;
     }
 
-    public String getLastUpdateDatetime() {
+    public Date getLastUpdateDatetime() {
         return lastUpdateDatetime;
     }
 
-    public void setLastUpdateDatetime(String lastUpdateDatetime) {
+    public void setLastUpdateDatetime(Date lastUpdateDatetime) {
         this.lastUpdateDatetime = lastUpdateDatetime;
     }
 }

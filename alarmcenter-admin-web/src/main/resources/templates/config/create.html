@@ -9,17 +9,13 @@
 <div class="page-content-wrap">
     <div class="row">
         <div class="col-md-12">
-
-            <form class="form-horizontal" action="/config/create" method="post">
+            <form id="configCreate" class="form-horizontal" action="/config/create" method="post">
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h3 class="panel-title"><strong>新增配置</strong></h3>
                         <ul class="panel-controls">
-                            <li><a href="#" class="panel-remove"><span class="fa fa-times"></span></a></li>
+                            <li></li>
                         </ul>
-                    </div>
-                    <div class="panel-body">
-
                     </div>
                     <div class="panel-body">
 
@@ -58,13 +54,16 @@
                                 <table>
                                     <tr>
                                         <td>
-                                            <input type="text" class="form-control" value="0"/>
+                                            <input id="sendEmailTimeInterval"
+                                                   name="sendEmailTimeInterval" type="text" class="form-control"
+                                                   value="0"/>
                                         </td>
                                         <td>
                                             分钟出现
                                         </td>
                                         <td>
-                                            <input type="text" class="form-control" value="0"/>
+                                            <input id="sendEmailNumLimit"
+                                                   name="sendEmailNumLimit" type="text" class="form-control" value="0"/>
                                         </td>
                                         <td>
                                             次普通错误/严重错误，则发邮件。如想取默认值，则上边信息默认为0。
@@ -80,32 +79,41 @@
                                 <table>
                                     <tr>
                                         <td>
-                                            <input type="text" class="form-control" value="0" id="sendEmailTimeInterval"
-                                                   name="sendEmailTimeInterval"/>
+                                            <input id="sendSmsTimeInterval" name="sendSmsTimeInterval" type="text"
+                                                   class="form-control" value="0"/>
                                         </td>
                                         <td>
                                             分钟出现
                                         </td>
                                         <td>
-                                            <input type="text" class="form-control" value="0" id="sendEmailNumLimit"
-                                                   name="sendEmailNumLimit"/>
+                                            <input id="sendSmsNumLimit" name="sendSmsNumLimit" type="text"
+                                                   class="form-control" value="0"/>
                                         </td>
                                         <td>
                                             次普通错误/严重错误，则发邮件。如想取默认值，则上边信息默认为0。
                                         </td>
                                     </tr>
                                 </table>
-
                             </div>
                         </div>
                     </div>
                     <div class="panel-footer">
                         <button class="btn btn-default" type="reset">重置</button>
-                        <button class="btn btn-primary pull-right" type="submit">提交</button>
+                        <button class="btn btn-primary pull-right" type="submit">
+                            提交
+                        </button>
                     </div>
                 </div>
             </form>
-
         </div>
     </div>
 </div>
+<script language="JavaScript" type="application/javascript">
+    $(document).ready(function () {
+        $('#configCreate').ajaxForm(function (result) {
+            eval(result.script);
+        });
+    });
+</script>
+
+

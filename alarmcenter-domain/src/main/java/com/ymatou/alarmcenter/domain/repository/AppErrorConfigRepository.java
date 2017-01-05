@@ -42,7 +42,7 @@ public class AppErrorConfigRepository extends MongoRepository implements Initial
         insertEntiy(dbName, appErrorConfig);
     }
 
-    public AppErrorConfig getAppErrorConfig(String appId) {
+    public AppErrorConfig getAppErrorConfigByAppId(String appId) {
         if (StringUtils.isBlank(appId))
             return null;
         Query<AppErrorConfig> query = newQuery(AppErrorConfig.class, dbName, "AppErrorConfig", ReadPreference.primaryPreferred());

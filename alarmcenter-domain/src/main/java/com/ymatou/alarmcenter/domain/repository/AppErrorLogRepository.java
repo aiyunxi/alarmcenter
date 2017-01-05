@@ -5,15 +5,20 @@ import com.mongodb.DBCollection;
 import com.mongodb.MongoClient;
 import com.mongodb.ReadPreference;
 import com.ymatou.alarmcenter.domain.model.AppErrorLog;
+import com.ymatou.alarmcenter.domain.model.PagingQueryResult;
 import com.ymatou.alarmcenter.infrastructure.db.mongodb.MongoRepository;
 import io.netty.util.internal.ConcurrentSet;
+import org.apache.commons.lang3.StringUtils;
 import org.bson.types.ObjectId;
 import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.mongodb.morphia.query.Criteria;
 import org.mongodb.morphia.query.Query;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.Resource;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -105,4 +110,42 @@ public class AppErrorLogRepository extends MongoRepository {
         getMongoClient().dropDatabase(dbName);
     }
 
+    public PagingQueryResult<AppErrorLog> getAppErrorLogList(String dbName, String collectionName, String appId, Integer errorLevel, Date beginTime, Date endTime, int pageSize, int pageIndex) {
+        if (pageIndex < 1)
+            pageIndex = 1;
+        Query<AppErrorLog> query = newQuery(AppErrorLog.class, dbName, collectionName, ReadPreference.secondaryPreferred());
+        ArrayList<Criteria> conditions = new ArrayList<>();
+        if (!StringUtils.isBlank(appId))
+            conditions.add(query.criteria("AppId").equal(appId));
+        if (errorLevel != null)
+            conditions.add(query.criteria("ErrorLevel").equal(errorLevel));
+        if (beginTime != null) {
+            DateTime dt = new DateTime(beginTime);
+            long begin = getTimeStamp(new DateTime(dt.getYear(), dt.getMonthOfYear(), dt.getDayOfMonth(), dt.getHourOfDay(), dt.getMinuteOfHour(), dt.getSecondOfMinute()));
+            conditions.add(query.criteria("AddTimeStamp").greaterThan(begin));
+        }
+        if (endTime != null) {
+            long end = getTimeStamp(new DateTime(endTime));
+            conditions.add(query.criteria("AddTimeStamp").lessThanOrEq(end));
+        }
+        int size = conditions.size();
+        Criteria[] array = conditions.toArray(new Criteria[size]);
+        query.and(array);
+        long totalRecords = getDatastore(dbName).getCount(query);
+        query.order("-AddTimeStamp");
+        List<AppErrorLog> list = query.offset(pageSize * (pageIndex - 1)).limit(pageSize).asList();
+        if (list == null)
+            list = new ArrayList<>();
+        PagingQueryResult<AppErrorLog> result = new PagingQueryResult<>();
+        result.setList(list);
+        result.setTotalRecords(totalRecords);
+        return result;
+    }
+
+    public PagingQueryResult<AppErrorLog> getAppErrorLogList(String date, String appId, Integer errorLevel, Date beginTime, Date endTime, int pageSize, int pageIndex) {
+        Date dt = DateTimeFormat.forPattern("yyyy-MM-dd").parseDateTime(date).toDate();
+        String dbName = getDatabaseName(dt);
+        String collectionName = getCollectionName(dt);
+        return getAppErrorLogList(dbName, collectionName, appId, errorLevel, beginTime, endTime, pageSize, pageIndex);
+    }
 }

@@ -2,24 +2,20 @@
 <ul class="breadcrumb">
     <li><a href="/home">首页</a></li>
     <li>配置管理</li>
-    <li class="active">更新配置</li>
+    <li class="active">编辑配置</li>
 </ul>
 <!-- END BREADCRUMB -->
 
-<div class="page-content-wrap">
+<div class="page-content-wrap" xmlns:th="http://www.w3.org/1999/xhtml">
     <div class="row">
         <div class="col-md-12">
-
-            <form class="form-horizontal" action="/config/update" method="post">
+            <form id="configEdit" class="form-horizontal" action="/config/edit" method="post">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <h3 class="panel-title"><strong>新增配置</strong></h3>
+                        <h3 class="panel-title"><strong>编辑配置</strong></h3>
                         <ul class="panel-controls">
-                            <li><a href="#" class="panel-remove"><span class="fa fa-times"></span></a></li>
+                            <li></li>
                         </ul>
-                    </div>
-                    <div class="panel-body">
-
                     </div>
                     <div class="panel-body">
 
@@ -28,7 +24,8 @@
                             <div class="col-md-6 col-xs-12">
                                 <div class="input-group">
                                     <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                    <input type="text" class="form-control" id="appId" name="appId"/>
+                                    <input type="text" class="form-control" id="appId" name="appId"
+                                           th:value="${config.appId}"/>
                                 </div>
                             </div>
                         </div>
@@ -38,7 +35,8 @@
                             <div class="col-md-6 col-xs-12">
                                 <div class="input-group">
                                     <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                    <input type="text" class="form-control" id="emails" name="emails"/>
+                                    <input type="text" class="form-control" id="emails" name="emails"
+                                           th:value="${config.emails}"/>
                                 </div>
                             </div>
                         </div>
@@ -48,7 +46,8 @@
                             <div class="col-md-6 col-xs-12">
                                 <div class="input-group">
                                     <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                    <input type="text" class="form-control" id="mobiles" name="mobiles"/>
+                                    <input type="text" class="form-control" id="mobiles" name="mobiles"
+                                           th:value="${config.mobiles}"/>
                                 </div>
                             </div>
                         </div>
@@ -58,13 +57,17 @@
                                 <table>
                                     <tr>
                                         <td>
-                                            <input type="text" class="form-control" value="0"/>
+                                            <input id="sendEmailTimeInterval"
+                                                   name="sendEmailTimeInterval" type="text" class="form-control"
+                                                   value="0" th:value="${config.sendEmailTimeInterval}"/>
                                         </td>
                                         <td>
                                             分钟出现
                                         </td>
                                         <td>
-                                            <input type="text" class="form-control" value="0"/>
+                                            <input id="sendEmailNumLimit"
+                                                   name="sendEmailNumLimit" type="text" class="form-control" value="0"
+                                                   th:value="${config.sendEmailNumLimit}"/>
                                         </td>
                                         <td>
                                             次普通错误/严重错误，则发邮件。如想取默认值，则上边信息默认为0。
@@ -80,32 +83,42 @@
                                 <table>
                                     <tr>
                                         <td>
-                                            <input type="text" class="form-control" value="0" id="sendEmailTimeInterval"
-                                                   name="sendEmailTimeInterval"/>
+                                            <input id="sendSmsTimeInterval" name="sendSmsTimeInterval" type="text"
+                                                   class="form-control" value="0"
+                                                   th:value="${config.sendSmsTimeInterval}"/>
                                         </td>
                                         <td>
                                             分钟出现
                                         </td>
                                         <td>
-                                            <input type="text" class="form-control" value="0" id="sendEmailNumLimit"
-                                                   name="sendEmailNumLimit"/>
+                                            <input id="sendSmsNumLimit" name="sendSmsNumLimit" type="text"
+                                                   class="form-control" value="0" th:value="${config.sendSmsNumLimit}"/>
                                         </td>
                                         <td>
                                             次普通错误/严重错误，则发邮件。如想取默认值，则上边信息默认为0。
                                         </td>
                                     </tr>
                                 </table>
-
                             </div>
                         </div>
                     </div>
                     <div class="panel-footer">
                         <button class="btn btn-default" type="reset">重置</button>
-                        <button class="btn btn-primary pull-right" type="submit">提交</button>
+                        <button class="btn btn-primary pull-right" type="submit">
+                            提交
+                        </button>
                     </div>
                 </div>
             </form>
-
         </div>
     </div>
 </div>
+<script language="JavaScript" type="application/javascript">
+    $(document).ready(function () {
+        $('#configEdit').ajaxForm(function (result) {
+            eval(result.script);
+        });
+    });
+</script>
+
+

@@ -10,7 +10,7 @@ import org.springframework.context.annotation.ImportResource;
  * Created by zhangxiaoming on 2016/11/9.
  */
 @ComponentScan("com.ymatou.alarmcenter")
-@ImportResource("classpath:config/applicationContext.xml")
+@ImportResource("classpath:applicationContext.xml")
 @SpringBootApplication
 @EnableCaching
 public class WebApplication {

@@ -8,11 +8,6 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 public class DefaultController {
-//    @RequestMapping("/")
-//    public String index() {
-//        return "web started!";
-//    }
-
     @RequestMapping("/version")
     public String version() {
         return "2016-12-14.2";

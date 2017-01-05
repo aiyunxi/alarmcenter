@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:sec="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!-- META SECTION -->
+    <title>异常详情</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+    <link rel="icon" href="favicon.ico" type="image/x-icon"/>
+    <!-- END META SECTION -->
+
+    <!-- CSS INCLUDE -->
+    <link rel="stylesheet" type="text/css" id="theme" href="/css/theme-default.css"/>
+
+    <!-- EOF CSS INCLUDE -->
+</head>
+<body>
+<div class="row">
+    <div class="col-md-2"><strong>应用编号:</strong></div>
+    <div class="col-md-10" th:text="${errorLog.appId}"></div>
+</div>
+<br/>
+<div class="row">
+    <div class="col-md-2"><strong>报错时间:</strong></div>
+    <div class="col-md-10" th:text="${errorLog.addTime}"></div>
+</div>
+<br/>
+<div class="row">
+    <div class="col-md-2"><strong>报错Url:</strong></div>
+    <div class="col-md-10" th:text="${errorLog.reqUrl}"></div>
+</div>
+<br/>
+<div class="row">
+    <div class="col-md-2"><strong>Form请求:</strong></div>
+    <div class="col-md-10" th:text="${errorLog.reqForm}"></div>
+</div>
+<br/>
+<div class="row">
+    <div class="col-md-2"><strong>报错请求头信息:</strong></div>
+    <div class="col-md-10" th:text="${errorLog.header}"></div>
+</div>
+<br/>
+<div class="row">
+    <div class="col-md-2"><strong>报错服务器Ip:</strong></div>
+    <div class="col-md-10" th:text="${errorLog.machineIp}"></div>
+</div>
+<br/>
+<div class="row">
+    <div class="col-md-2"><strong>报错级别:</strong></div>
+    <div class="col-md-10" th:text="${errorLog.errorLevel}"></div>
+</div>
+<br/>
+<div class="row">
+    <div class="col-md-2"><strong>报错方法名:</strong></div>
+    <div class="col-md-10" th:text="${errorLog.methodName}"></div>
+</div>
+<br/>
+<div class="row">
+    <div class="col-md-2"><strong>报错方法命名空间:</strong></div>
+    <div class="col-md-10" th:text="${errorLog.assemblyName}"></div>
+</div>
+<br/>
+<div class="row">
+    <div class="col-md-2"><strong>报错异常类型:</strong></div>
+    <div class="col-md-10" th:text="${errorLog.exceptionName}"></div>
+</div>
+<br/>
+<div class="row">
+    <div class="col-md-2"><strong>报错标题:</strong></div>
+    <div class="col-md-10" th:text="${errorLog.title}"></div>
+</div>
+<br/>
+<div class="row">
+    <div class="col-md-2"><strong>报错信息:</strong></div>
+    <div class="col-md-10" th:text="${errorLog.message}"></div>
+</div>
+<br/>
+<div class="row">
+    <div class="col-md-2"><strong>报错堆栈信息:</strong></div>
+    <div class="col-md-10" style="color:#F00" th:text="${errorLog.stackTrace}"></div>
+</div>
+</body>
+</html>
