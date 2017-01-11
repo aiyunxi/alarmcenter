@@ -3,33 +3,23 @@ package com.ymatou.alarmcenter.domain.model;
 import org.bson.types.ObjectId;
 import org.mongodb.morphia.annotations.Entity;
 import org.mongodb.morphia.annotations.Id;
-import org.mongodb.morphia.annotations.Property;
+
+import java.util.Date;
 
 /**
  * Created by zhangxiaoming on 2016/11/23.
  */
-@Entity(value = "NofityRecord", noClassnameStored = true)//兼容之前的错误单词
+@Entity(value = "NotifyRecord", noClassnameStored = true)//兼容之前的错误单词
 public class NotifyRecord {
     @Id
     private ObjectId id;
-
-    //@Indexed(name = "AppId")
-    @Property("AppId")
     private String appId;
-    @Property("RecordTime")
-    private Long recordTime;
-    @Property("RecordShowTime")
-    private String recordShowTime;
-    @Property("NotifyType")
+    private Date addTime;
     private Integer notifyType;
-    @Property("NofityTo")
     private String nofityTo;
-    @Property("Content")
     private String content;
-    @Property("RecordStatus")
-    private Integer recordStatus;
-    @Property("RecordMsg")
-    private String recordMsg;
+    private Integer notifyStatus;
+    private String message;
 
     public ObjectId getId() {
         return id;
@@ -47,20 +37,12 @@ public class NotifyRecord {
         this.appId = appId;
     }
 
-    public Long getRecordTime() {
-        return recordTime;
+    public Date getAddTime() {
+        return addTime;
     }
 
-    public void setRecordTime(Long recordTime) {
-        this.recordTime = recordTime;
-    }
-
-    public String getRecordShowTime() {
-        return recordShowTime;
-    }
-
-    public void setRecordShowTime(String recordShowTime) {
-        this.recordShowTime = recordShowTime;
+    public void setAddTime(Date addTime) {
+        this.addTime = addTime;
     }
 
     public Integer getNotifyType() {
@@ -87,19 +69,19 @@ public class NotifyRecord {
         this.content = content;
     }
 
-    public Integer getRecordStatus() {
-        return recordStatus;
+    public Integer getNotifyStatus() {
+        return notifyStatus;
     }
 
-    public void setRecordStatus(Integer recordStatus) {
-        this.recordStatus = recordStatus;
+    public void setNotifyStatus(Integer notifyStatus) {
+        this.notifyStatus = notifyStatus;
     }
 
-    public String getRecordMsg() {
-        return recordMsg;
+    public String getMessage() {
+        return message;
     }
 
-    public void setRecordMsg(String recordMsg) {
-        this.recordMsg = recordMsg;
+    public void setMessage(String message) {
+        this.message = message;
     }
 }

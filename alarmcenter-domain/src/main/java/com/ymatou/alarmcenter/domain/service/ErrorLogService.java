@@ -142,7 +142,7 @@ public class ErrorLogService {
             if (errorCount >= intSendSmsNumLimit) {
                 sendSms(appBaseConfig.getAppId(), appBaseConfig.getPhoneNumber(), errorCount, AppErrorLevel.Error, beginTime.toDate(), endTime.toDate());
                 appErrorConfigRepository.updateLastSmsHandleTime(appBaseConfig.getAppId());
-                logger.debug(String.format("appId:%s,send sms!", appBaseConfig.getAppId()));
+                logger.info(String.format("appId:%s,send sms!", appBaseConfig.getAppId()));
             } else {
                 logger.debug(String.format("appId:%s,send sms!,当前异常数 %s 小于设置值 %s，不发送！", appBaseConfig.getAppId(), errorCount
                         , intSendSmsNumLimit));
@@ -168,7 +168,7 @@ public class ErrorLogService {
             if (errorCount >= intSendEmailNumLimit) {
                 sendEmail(appBaseConfig.getAppId(), appBaseConfig.getEmailTo(), errorCount, AppErrorLevel.Error, beginTime.toDate(), endTime.toDate());
                 appErrorConfigRepository.updateLastEmailHandleTime(appBaseConfig.getAppId());
-                logger.debug(String.format("appId:%s,send email!", appBaseConfig.getAppId()));
+                logger.info(String.format("appId:%s,send email!", appBaseConfig.getAppId()));
             } else {
                 logger.debug(String.format("appId:%s,send email!,当前异常数 %s 小于设置值 %s，不发送！", appBaseConfig.getAppId(), errorCount
                         , intSendEmailNumLimit));
@@ -253,18 +253,17 @@ public class ErrorLogService {
         notifyRecord.setNofityTo(notifyTo);
         notifyRecord.setNotifyType(notifyType);
         if (ex != null) {
-            notifyRecord.setRecordStatus(2);
+            notifyRecord.setNotifyStatus(2);
         } else {
-            notifyRecord.setRecordStatus(1);
+            notifyRecord.setNotifyStatus(1);
         }
         if (notifyType == 1)//sms
         {
-            notifyRecord.setRecordMsg(String.format("发送短信：%s : %s : %s", notifyTo, content, ex == null ? "" : ex.getStackTrace()));
+            notifyRecord.setMessage(String.format("发送短信：%s : %s : %s", notifyTo, content, ex == null ? "" : ex.getStackTrace()));
         } else if (notifyType == 2) {//email
-            notifyRecord.setRecordMsg(String.format("发送Email：%s : %s : %s", notifyTo, content, ex == null ? "" : ex.getStackTrace()));
+            notifyRecord.setMessage(String.format("发送Email：%s : %s : %s", notifyTo, content, ex == null ? "" : ex.getStackTrace()));
         }
-        notifyRecord.setRecordTime(System.currentTimeMillis());
-        notifyRecord.setRecordShowTime(new DateTime().toString("yyyy-MM-dd HH:mm:ss"));
+        notifyRecord.setAddTime(new Date());
         notifyRecordRepository.saveNotifyRecord(notifyRecord);
     }
 }

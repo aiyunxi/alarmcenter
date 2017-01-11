@@ -1,7 +1,6 @@
 package com.ymatou.alarmcenter.domain.service;
 
 
-import com.google.common.base.Throwables;
 import com.ymatou.alarmcenter.domain.config.EmailConfig;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -64,7 +63,12 @@ public class EmailService implements InitializingBean {
             mailSender.send(mimeMessage);
 
         } catch (Exception ex) {
-            Throwables.propagate(ex);
+            StringBuilder sb = new StringBuilder();
+            sb.append("mailto:");
+            sb.append(StringUtils.join(to, ";"));
+            sb.append(ex.getMessage());
+            logger.error(sb.toString(), ex);
+            //Throwables.propagate(ex);
         }
 
     }

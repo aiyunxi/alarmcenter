@@ -2,6 +2,8 @@ package com.ymatou.alarmcenter.admin.web.model;
 
 import com.ymatou.alarmcenter.domain.model.AppBaseConfig;
 import com.ymatou.alarmcenter.domain.model.AppErrorConfig;
+import com.ymatou.alarmcenter.domain.model.AppErrorLog;
+import com.ymatou.alarmcenter.facade.enums.AppErrorLevel;
 import org.joda.time.DateTime;
 
 /**
@@ -36,4 +38,22 @@ public class ConvertUtils {
         appErrorConfig.setSendEmailNumLimit(model.getSendEmailNumLimit());
         appErrorConfig.setSendEmailTimeInterval(model.getSendEmailTimeInterval());
     }
+
+    public static AppErrorLogModel toAppErrorLogModel(AppErrorLog appErrorLog) {
+        AppErrorLogModel model = new AppErrorLogModel();
+        if (appErrorLog == null)
+            return model;
+        model.setId(appErrorLog.getId().toString());
+        model.setAppId(appErrorLog.getAppId());
+        model.setTitle(appErrorLog.getTitle());
+        model.setMessage(appErrorLog.getMessage());
+        model.setExceptionName(appErrorLog.getExceptionName());
+        model.setAddTime(appErrorLog.getAddTimeToDateTime().toString("yyyy-MM-dd HH:mm:ss"));
+        model.setDate(appErrorLog.getAddTimeToDateTime().toString("yyyy-MM-dd"));
+        model.setErrorLevel(AppErrorLevel.getByCode(appErrorLog.getErrorLevel()).getMessage());
+        model.setMachineIp(appErrorLog.getMachineIp());
+        return model;
+    }
+
+
 }

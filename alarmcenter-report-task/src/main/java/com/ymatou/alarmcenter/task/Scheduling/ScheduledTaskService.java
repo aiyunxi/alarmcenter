@@ -37,9 +37,9 @@ public class ScheduledTaskService {
         try {
             ResourceBundle disconf = ResourceBundle.getBundle("disconf");
             String env = disconf == null ? "" : disconf.getString("env");
-            logger.info("env:" + env + ",job running");
             if (StringUtils.equalsIgnoreCase("STG", env))
                 return;
+            logger.info("env:" + env + ",job running");
         } catch (Exception ex) {
             logger.error("errorHandler,ResourceBundle", ex);
         }

@@ -1,0 +1,23 @@
+<div th:fragment="footer" xmlns:th="http://www.w3.org/1999/xhtml">
+    <script language="JavaScript" src="/assets/js/jquery-1.11.1.min.js"></script>
+    <script language="JavaScript" src="/assets/bootstrap/js/bootstrap.min.js"></script>
+    <script language="javascript" src="/extend/js/bootbox.min.js"></script>
+    <script language="javascript" src="/extend/js/common.js"></script>
+    <script language="javascript" src="/extend/js/jqPaginator.min.js"></script>
+    <script language="javascript" src="/extend/js/jquery.form.js"></script>
+    <script language="javascript" src="/extend/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js"></script>
+    <script language="javascript"
+            src="/extend/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js"></script>
+    <script language="javascript"
+            src="/extend/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker-extension.js"></script>
+
+    <script language="javascript" src="/extend/bootstrap-select/js/bootstrap-select.min.js"></script>
+    <script language="JavaScript">
+        $(window).on('load', function () {
+            $('.selectpicker').selectpicker({
+                'selectedText': 'cat'
+            });
+            // $('.selectpicker').selectpicker('hide');
+        });
+    </script>
+</div>

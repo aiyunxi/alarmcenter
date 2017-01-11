@@ -8,6 +8,8 @@ import org.junit.Test;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -19,8 +21,11 @@ public class OperatorRepositoryTest extends BaseTest {
 
     @Test
     public void test1() {
+        List<String> roles = new ArrayList<>();
+        roles.add("admin");
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         Operator operator = operatorRepository.getOperatorByLoginId("admin");
+        operator.setRoles(roles);
         if (operator != null) {
             operator.setPassword(encoder.encode("123456"));
         } else {

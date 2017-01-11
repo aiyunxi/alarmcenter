@@ -6,6 +6,8 @@ import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.mongodb.morphia.annotations.*;
 
+import java.util.Date;
+
 import static com.ymatou.alarmcenter.infrastructure.common.Utils.getTimeStamp;
 
 /**
@@ -221,5 +223,8 @@ public class AppErrorLog {
         return dt;
     }
 
+    public Date getAddTimeToDate() {
+        return getAddTimeToDateTime().toDate();
+    }
 
 }

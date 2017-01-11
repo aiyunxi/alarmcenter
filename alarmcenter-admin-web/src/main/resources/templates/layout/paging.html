@@ -1,0 +1,45 @@
+<div th:fragment="paging (totalRecords,pageSize,pageIndex)" xmlns:th="http://www.w3.org/1999/xhtml">
+    <table style="width:100%">
+        <tr>
+            <td>
+                <ul class="pagination" id="pagination"></ul>
+            </td>
+            <td align="right">
+                <span class="label label-default"
+                      th:text="|总数：${totalRecords}|"></span>
+            </td>
+        </tr>
+    </table>
+
+    <script language="javascript" type="application/javascript"
+            th:inline="javascript">
+        function showPaging() {
+            var totalRecords = [[${totalRecords}]];
+            var pageSize = [[${pageSize}]];
+            var pageIndex = [[${pageIndex}]];
+            var visiblePages = 7;
+            var totalPages = 1;
+            if (totalRecords > 0)
+                totalPages = parseInt(totalRecords % pageSize > 0 ? totalRecords / pageSize + 1 : totalRecords / pageSize);
+
+            $.jqPaginator('#pagination', {
+                totalPages: totalPages,
+                visiblePages: visiblePages,
+                currentPage: pageIndex,
+                first: '<li class="first"><a href="javascript:;">首页</a></li>',
+                prev: '<li class="prev"><a href="javascript:;"><i class="arrow arrow2"></i>上一页</a></li>',
+                next: '<li class="next"><a href="javascript:;">下一页<i class="arrow arrow3"></i></a></li>',
+                last: '<li class="last"><a href="javascript:;">末页</a></li>',
+                page: '<li class="page"><a href="javascript:;">{{page}}</a></li>',
+                onPageChange: function (num, type) {
+                    if (type == "change") {
+                        redirectPage(num);
+                    }
+                }
+            });
+        }
+        $(function () {
+            showPaging();
+        });
+    </script>
+</div>

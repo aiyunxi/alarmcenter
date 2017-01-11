@@ -4,6 +4,9 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Created by zhangxiaoming on 2016/11/23.
  */
@@ -102,5 +105,13 @@ public enum AppErrorLevel {
             return getByCode(NumberUtils.toInt(value, 0));
         else
             return getByName(value);
+    }
+
+    public static Map<Integer, String> toMap() {
+        Map<Integer, String> map = new HashMap<>();
+        for (AppErrorLevel appErrorLevel : AppErrorLevel.values()) {
+            map.put(appErrorLevel.getCode(), appErrorLevel.getMessage());
+        }
+        return map;
     }
 }

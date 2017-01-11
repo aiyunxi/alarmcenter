@@ -4,6 +4,7 @@ import com.ymatou.alarmcenter.admin.web.common.result.AlertDialog;
 import com.ymatou.alarmcenter.admin.web.common.result.JavaScriptResult;
 import com.ymatou.alarmcenter.admin.web.model.ConfigModel;
 import com.ymatou.alarmcenter.admin.web.model.ConvertUtils;
+import com.ymatou.alarmcenter.admin.web.servcie.CommonServcie;
 import com.ymatou.alarmcenter.domain.model.AppBaseConfig;
 import com.ymatou.alarmcenter.domain.model.AppErrorConfig;
 import com.ymatou.alarmcenter.domain.model.PagingQueryResult;
@@ -32,6 +33,9 @@ public class ConfigController {
 
     @Resource
     private AppErrorConfigRepository appErrorConfigRepository;
+
+    @Resource
+    private CommonServcie commonServcie;
 
     @RequestMapping(value = "/create", method = GET)
     public String createConfig() {
@@ -112,6 +116,7 @@ public class ConfigController {
         modelAndView.addObject("pageIndex", pageIndex);
         modelAndView.addObject("totalRecords", result.getTotalRecords());
         modelAndView.addObject("appId", appId);
+        modelAndView.addObject("appIdMap", commonServcie.getAllAppIdMap());
         return modelAndView;
     }
 

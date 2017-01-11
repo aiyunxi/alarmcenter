@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <div th:include="/layout/head :: head"></div>
+</head>
+<body>
+
+<div th:include="/layout/navbar :: navbar"></div>
+
+
+<div class="container" style="margin-top: 50px;">
+    <div class="panel panel-default">
+        <!-- Default panel contents -->
+        <div class="panel-heading">
+            报警列表
+        </div>
+        <div class="panel-body">
+            <div class="col-lg-12">
+                <div class="input-group">
+                    <select class="selectpicker show-tick form-control" data-live-search="true" data-width="280px" id="appId" name="appId" th:remove="all-but-first">
+                        <option th:each="entry : ${appIdMap.entrySet()}"
+                                th:value="${entry.key}" th:text="${entry.value}"
+                                th:selected="${#strings.equals(#httpServletRequest.getParameter('appId'),entry.key)}"></option>
+                    </select>
+                    <input id="beginTime" name="beginTime" type="text" class="form-control form_datetime"
+                           placeholder="开始时间"
+                           th:value="${beginTime}"/>
+
+                    <input id="endTime" name="endTime" type="text" class="form-control form_datetime"
+                           placeholder="结束时间"
+                           th:value="${endTime}"/>
+
+                    <select class="form-control" id="notifyType" name="notifyType" th:remove="all-but-first">
+                        <option th:each="entry : ${notifyTypeMap.entrySet()}"
+                                th:value="${entry.key}" th:text="${entry.value}"
+                                th:selected="${#strings.equals(#httpServletRequest.getParameter('notifyType'),entry.key)}"></option>
+                    </select>
+
+                    <select class="form-control" id="notifyStatus" name="notifyStatus" th:remove="all-but-first">
+                        <option th:each="entry : ${notifyStatusMap.entrySet()}"
+                                th:value="${entry.key}" th:text="${entry.value}"
+                                th:selected="${#strings.equals(#httpServletRequest.getParameter('notifyStatus'),entry.key)}"></option>
+                    </select>
+                    <span class="input-group-btn">
+                    <button class="btn btn-default" type="button" onclick="search();"><span
+                            class="glyphicon glyphicon-search"
+                            aria-hidden="true"></span>查 询
+                    </button>
+                    </span>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <table class="table table-bordered table table-hover">
+        <thead>
+        <tr>
+            <th width="50">应用编号</th>
+            <th width="100">发送时间</th>
+            <th width="100">类型</th>
+            <th width="150">接收者</th>
+            <th width="100">内容</th>
+            <th width="100">状态</th>
+        </tr>
+        </thead>
+        <tbody th:remove="all-but-first">
+        <tr th:each="notify:${list}" th:id="${notify.id}">
+            <td th:text="${notify.appId}"></td>
+            <td th:text="${notify.recordShowTime}"></td>
+            <td th:text="${notify.notifyType}==1?'短信':'邮件'"></td>
+            <td th:text="${notify.nofityTo}"></td>
+            <td th:text="${notify.content}"></td>
+            <td th:text="${notify.recordStatus}==1?'成功':'失败'"></td>
+        </tr>
+        </tbody>
+    </table>
+    <div th:include="/layout/footer :: footer"></div>
+    <div th:include="/layout/paging :: paging (${totalRecords},${pageSize},${pageIndex})"></div>
+</div>
+
+<script language="javascript" type="application/javascript" xmlns:th="http://www.w3.org/1999/xhtml"
+        th:inline="javascript">
+    function redirectPage(pageIndex) {
+        var appId = $("#appId").val().trim();
+        var beginTime = $("#beginTime").val().trim();
+        var endTime = $("#endTime").val().trim();
+        var notifyType = $("#notifyType").val().trim();
+        var notifyStatus = $("#notifyStatus").val().trim();
+        /*<![CDATA[*/
+        var url = '/notify/list?pageIndex=' + pageIndex + '&appId=' + appId + '&beginTime=' + beginTime + '&endTime=' + endTime
+            + "&notifyType=" + notifyType + "&notifyStatus=" + notifyStatus;
+        /*]]>*/
+
+        window.location.href = url;
+    }
+
+    function search() {
+        var appId = $("#appId").val().trim();
+        redirectPage(1, appId);
+    }
+</script>
+</body>
+</html>
+

@@ -1,126 +1,89 @@
-<!-- START BREADCRUMB -->
-<ul class="breadcrumb" xmlns:th="http://www.w3.org/1999/xhtml">
-    <li><a href="/home">首页</a></li>
-    <li>配置管理</li>
-    <li class="active">配置列表</li>
-</ul>
-<!-- END BREADCRUMB -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <div th:include="/layout/head :: head"></div>
+</head>
+<body>
 
-<div class="page-content-wrap" xmlns:th="http://www.w3.org/1999/xhtml">
-    <!-- START RESPONSIVE TABLES -->
-    <div class="row">
-        <div class="col-md-12">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h3 class="panel-title">配置列表</h3>
-                </div>
-                <div class="panel-body panel-body-search">
-                    <div class="form-group">
-                        <div class="col-md-8">
-                            <div class="input-group">
-                                <div class="input-group-addon">
-                                    <span class="fa fa-search"></span>
-                                </div>
-                                <input id="appId" name="appId" type="text" class="form-control" placeholder="应用编号"
-                                       th:value="${appId}"/>
-                                <div class="input-group-btn">
-                                    <button class="btn btn-primary" onclick="search();">查询</button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
+<div th:include="/layout/navbar :: navbar"></div>
 
-                        </div>
-                    </div>
-                </div>
-                <div class="panel-body panel-body-table">
-                    <div class="table-responsive">
-                        <table class="table table-bordered table-striped table-actions">
-                            <thead>
-                            <tr>
-                                <th width="50">应用编号</th>
-                                <th width="100">邮箱地址</th>
-                                <th width="100">手机号</th>
-                                <th width="150">最后一次更新时间</th>
-                                <th width="100">执行</th>
-                            </tr>
-                            </thead>
-                            <tbody th:remove="all-but-first">
-                            <tr th:each="config:${list}" th:id="${config.id}">
-                                <td>
-                                    <a th:href="|javascript:showDetail('${config.appId}');|"
-                                       th:text="${config.appId}"></a>
-                                </td>
 
-                                <td th:text="${config.emailTo}"></td>
-                                <td th:text="${config.phoneNumber}"></td>
-                                <td th:text="${#dates.format(config.lastUpdateDatetime, 'yyyy-MM-dd HH:mm:ss')}"></td>
-                                <td>
-                                    <button class="btn btn-default btn-rounded btn-sm"
-                                            th:onclick="|editRecord('${config.appId}');|"><span
-                                            class="fa fa-pencil"></span></button>
-                                    <button class="btn btn-danger btn-rounded btn-sm"
-                                            th:onClick="|deleteRecord('${config.appId}');|">
-                                        <span class="fa fa-times"></span></button>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
-
+<div class="container" style="margin-top: 50px;">
+    <div class="panel panel-default">
+        <!-- Default panel contents -->
+        <div class="panel-heading">
+            配置列表
+        </div>
+        <div class="panel-body">
+            <div class="col-lg-12">
+                <div class="input-group">
+                    <!--<input id="appId" name="appId" type="text" class="form-control" placeholder="应用编号"-->
+                    <!--th:value="${appId}"/>-->
+                    <select class="selectpicker form-control" data-live-search="true" data-width="auto" id="appId"
+                            name="appId" th:remove="all-but-first">
+                        <option th:each="entry : ${appIdMap.entrySet()}"
+                                th:value="${entry.key}" th:text="${entry.value}"
+                                th:selected="${#strings.equals(#httpServletRequest.getParameter('appId'),entry.key)}"></option>
+                    </select>
+                    <span class="input-group-btn">
+                    <button class="btn btn-default" type="button" onclick="search();"><span
+                            class="glyphicon glyphicon-search"
+                            aria-hidden="true"></span>查 询
+                    </button>
+                    <a href="/Config/Create" target="_blank" class="btn btn-default"><span
+                            class="glyphicon glyphicon-plus" aria-hidden="true"></span>添加</a>
+                    </span>
                 </div>
             </div>
 
         </div>
-    </div>
-    <!-- END RESPONSIVE TABLES -->
 
+    </div>
+
+    <table class="table table-bordered table table-hover">
+        <thead>
+        <tr>
+            <th width="50">应用编号</th>
+            <th width="100">邮箱地址</th>
+            <th width="100">手机号</th>
+            <th width="150">最后一次更新时间</th>
+            <th width="100">执行</th>
+        </tr>
+        </thead>
+        <tbody th:remove="all-but-first">
+        <tr th:each="config:${list}" th:id="${config.id}">
+            <td>
+                <a th:href="|javascript:showDetail('${config.appId}');|"
+                   th:text="${config.appId}"></a>
+            </td>
+
+            <td th:text="${config.emailTo}"></td>
+            <td th:text="${config.phoneNumber}"></td>
+            <td th:text="${#dates.format(config.lastUpdateDatetime, 'yyyy-MM-dd HH:mm:ss')}"></td>
+
+
+            <td width="160px;">
+                <a th:href="|javascript:editRecord('${config.appId}');|" target="_blank" class="btn btn-default"><span
+                        class="glyphicon glyphicon-pencil" aria-hidden="true"></span>编辑</a>
+                <a th:href="|javascript:deleteRecord('${config.appId}');|" class="btn btn-default"><span
+                        class="glyphicon glyphicon-remove" aria-hidden="true"></span>删除</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <div th:include="/layout/footer :: footer"></div>
+    <div th:include="/layout/paging :: paging (${totalRecords},${pageSize},${pageIndex})"></div>
 </div>
-<!--paging begion-->
-<div style="float:right " xmlns:th="http://www.w3.org/1999/xhtml">
-    <ul class="pagination" id="pagination"></ul>
-    <input type="hidden" id="totalRecords" th:value="${totalRecords}"/>
-    <input type="hidden" id="pageSize" th:value="${pageSize}"/>
-    <input type="hidden" id="pageIndex" th:value="${pageIndex}"/>
-    <!--设置最多显示的页码数 可以手动设置 默认为7-->
-    <input type="hidden" id="visiblePages" value="7"/>
-</div>
+
 <script language="javascript" type="application/javascript" xmlns:th="http://www.w3.org/1999/xhtml"
         th:inline="javascript">
-
-    function showPaging() {
-        var totalRecords = parseInt($("#totalRecords").val().trim());
-        var pageSize = parseInt($("#pageSize").val().trim());
-        var pageIndex = parseInt($("#pageIndex").val().trim());
-        var totalPages = 1;
-        if (totalRecords > 0)
-            totalPages = parseInt(totalRecords % pageSize > 0 ? totalRecords / pageSize + 1 : totalRecords / pageSize);
-        var visiblePages = parseInt($("#visiblePages").val().trim());
+    function redirectPage(pageIndex) {
         var appId = $("#appId").val().trim();
-        $.jqPaginator('#pagination', {
-            totalPages: totalPages,
-            visiblePages: visiblePages,
-            currentPage: pageIndex,
-            first: '<li class="first"><a href="javascript:;">首页</a></li>',
-            prev: '<li class="prev"><a href="javascript:;"><i class="arrow arrow2"></i>上一页</a></li>',
-            next: '<li class="next"><a href="javascript:;">下一页<i class="arrow arrow3"></i></a></li>',
-            last: '<li class="last"><a href="javascript:;">末页</a></li>',
-            page: '<li class="page"><a href="javascript:;">{{page}}</a></li>',
-            onPageChange: function (num, type) {
-                if (type == "change") {
-                    redirectPage(num, appId);
-                }
-            }
-        });
-    }
-    $(function () {
-        showPaging();
-    });
-    function redirectPage(pageIndex, appId) {
         /*<![CDATA[*/
         var url = '/config/list?pageIndex=' + pageIndex + '&appId=' + appId;
         /*]]>*/
-        loadPage(url);
+
+        window.location.href = url;
     }
 
     function search() {
@@ -170,4 +133,6 @@
 
     }
 </script>
-<!--pagin end-->
+</body>
+</html>
+
