@@ -46,14 +46,11 @@ public class ConfigController {
     @RequestMapping(value = "/create", method = POST)
     public JavaScriptResult createConfig(ConfigModel model) {
         AppBaseConfig appBaseConfig = appBaseConfigRepository.getAppBaseConfigByAppId(model.getAppId());
-        AppErrorConfig appErrorConfig = appErrorConfigRepository.getAppErrorConfigByAppId(model.getAppId());
+
         if (appBaseConfig != null)
             throw new RuntimeException(String.format("应用编号为：%s 的记录已存在！", model.getAppId()));
-        if (appBaseConfig == null)
-            appBaseConfig = new AppBaseConfig();
-        if (appErrorConfig == null)
-            appErrorConfig = new AppErrorConfig();
-
+        appBaseConfig = new AppBaseConfig();
+        AppErrorConfig appErrorConfig = new AppErrorConfig();
         ConvertUtils.toAppBaseConfigAndAppErrorConfig(model, appBaseConfig, appErrorConfig);
         appBaseConfigRepository.saveAppBaseConfig(appBaseConfig);
         appErrorConfigRepository.saveAppErrorConfig(appErrorConfig);

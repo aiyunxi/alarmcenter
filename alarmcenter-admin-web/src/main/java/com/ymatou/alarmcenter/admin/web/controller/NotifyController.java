@@ -48,8 +48,6 @@ public class NotifyController {
         if (!StringUtils.isBlank(appId))
             appId = appId.toLowerCase();
 
-        DateTime dt = new DateTime();
-
         DateTime begin = Utils.DateParse(beginTime);
         DateTime end = Utils.DateParse(endTime);
         PagingQueryResult<NotifyRecord> result = notifyRecordRepository.getNotifyRecordList(appId, begin == null ? null : begin.toDate(), end == null ? null : end.toDate(), notifyType,
