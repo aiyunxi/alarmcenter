@@ -25,11 +25,13 @@ public class OperatorRepositoryTest extends BaseTest {
         roles.add("admin");
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         Operator operator = operatorRepository.getOperatorByLoginId("admin");
-        operator.setRoles(roles);
+
         if (operator != null) {
             operator.setPassword(encoder.encode("123456"));
+            operator.setRoles(roles);
         } else {
             operator = new Operator();
+            operator.setRoles(roles);
             operator.setId(UUID.randomUUID().toString().replace("-", ""));
             operator.setName("admin");
             operator.setLoginId("admin");
