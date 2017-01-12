@@ -3,8 +3,10 @@ package com.ymatou.alarmcenter.admin.web.controller;
 import com.ymatou.alarmcenter.admin.web.model.AppErrorLogModel;
 import com.ymatou.alarmcenter.admin.web.model.ConvertUtils;
 import com.ymatou.alarmcenter.admin.web.servcie.CommonServcie;
+import com.ymatou.alarmcenter.domain.model.AppBaseConfig;
 import com.ymatou.alarmcenter.domain.model.AppErrorLog;
 import com.ymatou.alarmcenter.domain.model.PagingQueryResult;
+import com.ymatou.alarmcenter.domain.repository.AppBaseConfigRepository;
 import com.ymatou.alarmcenter.domain.repository.AppErrorLogRepository;
 import com.ymatou.alarmcenter.facade.enums.AppErrorLevel;
 import com.ymatou.alarmcenter.infrastructure.common.Utils;
@@ -14,15 +16,14 @@ import org.joda.time.format.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 /**
  * Created by zhangxiaoming on 2017/1/4.
@@ -33,6 +34,10 @@ public class ExceptionController {
 
     @Resource
     private AppErrorLogRepository appErrorLogRepository;
+
+    @Resource
+    private AppBaseConfigRepository appBaseConfigRepository;
+
     @Resource
     private CommonServcie commonServcie;
 
@@ -51,14 +56,63 @@ public class ExceptionController {
     }
 
     @RequestMapping(value = "/chart", method = GET)
-    public ModelAndView chart(String appId, String date) {
+    public ModelAndView chart() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("/exception/chart");
-        DateTime dt = DateTimeFormat.forPattern("yyyy-MM-dd").parseDateTime(date);
-        List<DateTime> timeList = new ArrayList<>();
-
-
+        Map<Integer, String> errorLevelMap = new HashMap<>();
+        errorLevelMap.put(null, "请选择异常类型");
+        errorLevelMap.putAll(AppErrorLevel.toMap());
+        modelAndView.addObject("errorLevelMap", errorLevelMap);
+        modelAndView.addObject("appIdMap", commonServcie.getAllAppIdMap());
         return modelAndView;
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/chart", method = POST)
+    public Map<String, Long> chart(String appId, String date, int errorLevel) {
+        DateTime dt = Utils.DateParse(date);
+
+        Map<String, Long> countMap = new LinkedHashMap<>();
+        for (int i = 0; i < 24; i++) {
+            DateTime begin = dt.plusHours(i);
+            DateTime end = dt.plusHours(i + 1);
+            String key = begin.toString("yyyy-MM-dd HH");
+            long count = appErrorLogRepository.getErrorCount(appId, errorLevel, begin.toDate(), end.toDate());
+            countMap.put(key, count);
+        }
+        return countMap;
+    }
+
+    @RequestMapping(value = "/ranking", method = GET)
+    public String ranking() {
+        return "/exception/ranking";
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/top", method = GET)
+    public Map<String, Long> top() {
+        Map<String, Long> countMap = new LinkedHashMap<>();
+        List<AppBaseConfig> list = appBaseConfigRepository.getAppBaseConfigList();
+        DateTime now = new DateTime();
+        for (AppBaseConfig config : list) {
+            if (config == null)
+                continue;
+            long count = appErrorLogRepository.getErrorCount(config.getAppId(), AppErrorLevel.Error.getCode(), now.minusHours(1).toDate(), now.toDate());
+            countMap.put(config.getAppId(), count);
+        }
+        return sortMap(countMap, 10);
+    }
+
+    private Map sortMap(Map oldMap, int showNumber) {
+        ArrayList<Map.Entry<String, Integer>> list = new ArrayList<>(oldMap.entrySet());
+        Collections.sort(list, (o1, o2) -> ((Comparable) ((Map.Entry) (o2)).getValue())
+                .compareTo(((Map.Entry) (o1)).getValue()));
+        Map newMap = new LinkedHashMap();
+        showNumber = list.size() <= showNumber ? list.size() : showNumber;
+        for (int i = 0; i < showNumber; i++) {
+            newMap.put(list.get(i).getKey(), list.get(i).getValue());
+        }
+        return newMap;
     }
 
     @RequestMapping(value = "/list", method = GET)
@@ -73,10 +127,17 @@ public class ExceptionController {
 
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("/exception/list");
+        Map<Integer, String> errorLevelMap = new HashMap<>();
+        errorLevelMap.put(null, "请选择异常类型");
+        errorLevelMap.putAll(AppErrorLevel.toMap());
+        modelAndView.addObject("errorLevelMap", errorLevelMap);
+        modelAndView.addObject("appIdMap", commonServcie.getAllAppIdMap());
         if (pageSize == null)
             pageSize = 15;
         if (pageIndex == null)
             pageIndex = 1;
+
+
         if (!StringUtils.isBlank(appId))
             appId = appId.toLowerCase();
 
@@ -91,6 +152,12 @@ public class ExceptionController {
             dt = new DateTime().plusDays(1);
             end = new DateTime(dt.getYear(), dt.getMonthOfYear(), dt.getDayOfMonth(), 0, 0, 0);
         }
+        modelAndView.addObject("beginTime", begin.toString("yyyy/MM/dd HH:mm:ss"));
+        modelAndView.addObject("endTime", end.toString("yyyy/MM/dd HH:mm:ss"));
+
+        if (StringUtils.isBlank(appId) && errorLevel == null && StringUtils.isBlank(beginTime) && StringUtils.isBlank(endTime)
+                && StringUtils.isBlank(machineIp) && StringUtils.isBlank(keyWord))
+            return modelAndView;
 
         PagingQueryResult<AppErrorLog> result = appErrorLogRepository.getAppErrorLogList(appId, errorLevel, begin.toDate(), end.toDate(),
                 machineIp, keyWord, pageSize, pageIndex);
@@ -112,15 +179,8 @@ public class ExceptionController {
         modelAndView.addObject("errorLevel", errorLevel);
         modelAndView.addObject("machineIp", machineIp);
         modelAndView.addObject("keyWord", keyWord);
-        modelAndView.addObject("beginTime", begin.toString("yyyy/MM/dd HH:mm:ss"));
-        modelAndView.addObject("endTime", end.toString("yyyy/MM/dd HH:mm:ss"));
 
-        Map<Integer, String> errorLevelMap = new HashMap<>();
-        errorLevelMap.put(null, "请选择异常类型");
-        errorLevelMap.putAll(AppErrorLevel.toMap());
-        modelAndView.addObject("errorLevelMap", errorLevelMap);
 
-        modelAndView.addObject("appIdMap", commonServcie.getAllAppIdMap());
         return modelAndView;
     }
 }

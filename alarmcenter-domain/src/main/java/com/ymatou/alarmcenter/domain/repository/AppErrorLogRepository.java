@@ -94,6 +94,12 @@ public class AppErrorLogRepository extends MongoRepository {
         return totalRecords;
     }
 
+    public long getErrorCount(String appId, int errorLevel, Date beginTime, Date endTime) {
+        String dbName = getDatabaseName(beginTime);
+        String collectionName = getCollectionName(beginTime);
+        return getErrorCount(dbName, collectionName, appId, errorLevel, beginTime, endTime);
+    }
+
     public List<AppErrorLog> getErrorList(String dbName, String collectionName, String appId, int errorLevel, Date beginTime, Date endTime) {
         Query<AppErrorLog> query = newQuery(AppErrorLog.class, dbName, collectionName, ReadPreference.primaryPreferred());
         DateTime dt = new DateTime(beginTime);

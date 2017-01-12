@@ -6,7 +6,7 @@
             </td>
             <td align="right">
                 <span class="label label-default"
-                      th:text="|总数：${totalRecords}|"></span>
+                      th:text="|总数：${totalRecords==null?0:totalRecords}|"></span>
             </td>
         </tr>
     </table>
