@@ -102,5 +102,9 @@
             <groupId>com.ymatou.disconf</groupId>
             <artifactId>disconf-client</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.ymatou.library</groupId>
+            <artifactId>datetime-parse</artifactId>
+        </dependency>
     </dependencies>
 </project>

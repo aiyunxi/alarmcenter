@@ -2,13 +2,18 @@ package com.ymatou.alarmcenter.infrastructure.config;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.*;
+import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.ymatou.alarmcenter.infrastructure.serialize.DateDeserializer;
+import com.ymatou.alarmcenter.infrastructure.serialize.DateSerializer;
+import org.springframework.context.annotation.Configuration;
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * 自定义的JSON转换MAPPER
  */
+@Configuration
 public class CustomObjectMapper extends ObjectMapper {
 
     public CustomObjectMapper() {
@@ -24,7 +29,11 @@ public class CustomObjectMapper extends ObjectMapper {
 
         configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
-        setDateFormat(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss"));
+        //setDateFormat(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss"));
+        SimpleModule module = new SimpleModule();
+        module.addSerializer(Date.class, new DateSerializer());
+        module.addDeserializer(Date.class, new DateDeserializer());
+        registerModule(module);
     }
 
     //null的JSON序列

@@ -1,10 +1,11 @@
 package com.ymatou.alarmcenter.domain.model;
 
-import org.apache.commons.lang3.StringUtils;
+import com.ymatou.library.datetimeparse.DateTimeParse;
 import org.bson.types.ObjectId;
 import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
-import org.mongodb.morphia.annotations.*;
+import org.mongodb.morphia.annotations.Entity;
+import org.mongodb.morphia.annotations.Id;
+import org.mongodb.morphia.annotations.Property;
 
 import java.util.Date;
 
@@ -200,27 +201,33 @@ public class AppErrorLog {
     }
 
     public DateTime getAddTimeToDateTime() {
-        DateTime dt = new DateTime();
+        // DateTime dt = new DateTime();
+//        try {
+//            dt = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss").parseDateTime(getAddTime());
+//        } catch (Exception ex1) {
+//            try {
+//                dt = DateTime.parse(getAddTime());
+//            } catch (Exception ex2) {
+//                try {
+//                    String str = getAddTime();
+//                    if (!StringUtils.isBlank(str)) {
+//                        str = str.replace("T", " ");
+//                        String[] array = StringUtils.split(str, ".");
+//                        str = array[0];
+//                        dt = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss").parseDateTime(str);
+//                    }
+//                } catch (Exception ex3) {
+//                    dt = new DateTime();
+//                }
+//            }
+//        }
+
         try {
-            dt = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss").parseDateTime(getAddTime());
-        } catch (Exception ex1) {
-            try {
-                dt = DateTime.parse(getAddTime());
-            } catch (Exception ex2) {
-                try {
-                    String str = getAddTime();
-                    if (!StringUtils.isBlank(str)) {
-                        str = str.replace("T", " ");
-                        String[] array = StringUtils.split(str, ".");
-                        str = array[0];
-                        dt = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss").parseDateTime(str);
-                    }
-                } catch (Exception ex3) {
-                    dt = new DateTime();
-                }
-            }
+            Date date = DateTimeParse.parse(getAddTime());
+            return new DateTime(date);
+        } catch (Exception ex) {
+            return new DateTime();
         }
-        return dt;
     }
 
     public Date getAddTimeToDate() {

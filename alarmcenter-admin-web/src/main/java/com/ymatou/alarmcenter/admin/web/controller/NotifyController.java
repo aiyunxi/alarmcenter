@@ -4,7 +4,6 @@ import com.ymatou.alarmcenter.admin.web.servcie.CommonServcie;
 import com.ymatou.alarmcenter.domain.model.NotifyRecord;
 import com.ymatou.alarmcenter.domain.model.PagingQueryResult;
 import com.ymatou.alarmcenter.domain.repository.NotifyRecordRepository;
-import com.ymatou.alarmcenter.infrastructure.common.Utils;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.springframework.stereotype.Controller;
@@ -13,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -32,8 +32,8 @@ public class NotifyController {
 
     @RequestMapping(value = "/list", method = GET)
     public ModelAndView searchNotify(@RequestParam(value = "appId", required = false) String appId,
-                                     @RequestParam(value = "beginTime", required = false) String beginTime,
-                                     @RequestParam(value = "endTime", required = false) String endTime,
+                                     @RequestParam(value = "beginTime", required = false) Date beginTime,
+                                     @RequestParam(value = "endTime", required = false) Date endTime,
                                      @RequestParam(value = "notifyType", required = false) Integer notifyType,
                                      @RequestParam(value = "notifyStatus", required = false) Integer notifyStatus,
                                      @RequestParam(value = "pageSize", required = false) Integer pageSize,
@@ -48,9 +48,7 @@ public class NotifyController {
         if (!StringUtils.isBlank(appId))
             appId = appId.toLowerCase();
 
-        DateTime begin = Utils.DateParse(beginTime);
-        DateTime end = Utils.DateParse(endTime);
-        PagingQueryResult<NotifyRecord> result = notifyRecordRepository.getNotifyRecordList(appId, begin == null ? null : begin.toDate(), end == null ? null : end.toDate(), notifyType,
+        PagingQueryResult<NotifyRecord> result = notifyRecordRepository.getNotifyRecordList(appId, beginTime, endTime, notifyType,
                 notifyStatus, pageSize, pageIndex);
 
         modelAndView.addObject("list", result.getList());
@@ -58,8 +56,8 @@ public class NotifyController {
         modelAndView.addObject("pageIndex", pageIndex);
         modelAndView.addObject("totalRecords", result.getTotalRecords());
         modelAndView.addObject("appId", appId);
-        modelAndView.addObject("beginTime", begin == null ? "" : begin.toString("yyyy/MM/dd HH:mm:ss"));
-        modelAndView.addObject("endTime", end == null ? "" : end.toString("yyyy/MM/dd HH:mm:ss"));
+        modelAndView.addObject("beginTime", beginTime == null ? "" : new DateTime(beginTime).toString("yyyy/MM/dd HH:mm:ss"));
+        modelAndView.addObject("endTime", endTime == null ? "" : new DateTime(endTime).toString("yyyy/MM/dd HH:mm:ss"));
         modelAndView.addObject("notifyType", notifyType);
         modelAndView.addObject("notifyStatus", notifyStatus);
 

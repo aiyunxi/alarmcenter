@@ -9,10 +9,8 @@ import com.ymatou.alarmcenter.domain.model.PagingQueryResult;
 import com.ymatou.alarmcenter.domain.repository.AppBaseConfigRepository;
 import com.ymatou.alarmcenter.domain.repository.AppErrorLogRepository;
 import com.ymatou.alarmcenter.facade.enums.AppErrorLevel;
-import com.ymatou.alarmcenter.infrastructure.common.Utils;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -42,11 +40,10 @@ public class ExceptionController {
     private CommonServcie commonServcie;
 
     @RequestMapping(value = "/detail", method = GET)
-    public ModelAndView exceptionDetail(@RequestParam("id") String id, @RequestParam("date") String date) {
+    public ModelAndView exceptionDetail(String id, Date date) {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("/exception/detail");
-        DateTime dt = DateTimeFormat.forPattern("yyyy-MM-dd").parseDateTime(date);
-        AppErrorLog appErrorLog = appErrorLogRepository.getAppErrLog(dt.toDate(), id);
+        AppErrorLog appErrorLog = appErrorLogRepository.getAppErrLog(date, id);
         if (appErrorLog == null)
             appErrorLog = new AppErrorLog();
         modelAndView.addObject("errorLog", appErrorLog);
@@ -69,9 +66,8 @@ public class ExceptionController {
 
     @ResponseBody
     @RequestMapping(value = "/chart", method = POST)
-    public Map<String, Long> chart(String appId, String date, int errorLevel) {
-        DateTime dt = Utils.DateParse(date);
-
+    public Map<String, Long> chart(String appId, Date date, int errorLevel) {
+        DateTime dt = new DateTime(date);
         Map<String, Long> countMap = new LinkedHashMap<>();
         for (int i = 0; i < 24; i++) {
             DateTime begin = dt.plusHours(i);
@@ -118,8 +114,8 @@ public class ExceptionController {
     @RequestMapping(value = "/list", method = GET)
     public ModelAndView searchException(@RequestParam(value = "appId", required = false) String appId,
                                         @RequestParam(value = "errorLevel", required = false) Integer errorLevel,
-                                        @RequestParam(value = "beginTime", required = false) String beginTime,
-                                        @RequestParam(value = "endTime", required = false) String endTime,
+                                        @RequestParam(value = "beginTime", required = false) Date beginTime,
+                                        @RequestParam(value = "endTime", required = false) Date endTime,
                                         @RequestParam(value = "machineIp", required = false) String machineIp,
                                         @RequestParam(value = "keyWord", required = false) String keyWord,
                                         @RequestParam(value = "pageSize", required = false) Integer pageSize,
@@ -143,8 +139,8 @@ public class ExceptionController {
 
         DateTime dt = new DateTime();
 
-        DateTime begin = Utils.DateParse(beginTime);
-        DateTime end = Utils.DateParse(endTime);
+        DateTime begin = beginTime == null ? null : new DateTime(beginTime);
+        DateTime end = endTime == null ? null : new DateTime(endTime);
         if (begin == null) {
             begin = new DateTime(dt.getYear(), dt.getMonthOfYear(), dt.getDayOfMonth(), 0, 0, 0);
         }
@@ -155,7 +151,7 @@ public class ExceptionController {
         modelAndView.addObject("beginTime", begin.toString("yyyy/MM/dd HH:mm:ss"));
         modelAndView.addObject("endTime", end.toString("yyyy/MM/dd HH:mm:ss"));
 
-        if (StringUtils.isBlank(appId) && errorLevel == null && StringUtils.isBlank(beginTime) && StringUtils.isBlank(endTime)
+        if (StringUtils.isBlank(appId) && errorLevel == null && beginTime == null && beginTime == null
                 && StringUtils.isBlank(machineIp) && StringUtils.isBlank(keyWord))
             return modelAndView;
 
@@ -180,7 +176,8 @@ public class ExceptionController {
         modelAndView.addObject("machineIp", machineIp);
         modelAndView.addObject("keyWord", keyWord);
 
-
         return modelAndView;
     }
+
+
 }
