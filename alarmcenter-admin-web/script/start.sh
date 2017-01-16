@@ -4,9 +4,9 @@ source "/etc/profile"
 GCLOGPATH="logs/gc.log"
 MAIN_CLASS="com.ymatou.alarmcenter.admin.web.WebApplication"
 APP_NAME="alarmadmin.ymatou.cn"
-CLASS_PATH="conf:lib/*"
+CLASS_PATH="lib:conf/*"
 JAVA_OPTS=" -server \
-            -Xms4096m -Xmx4096m \
+            -Xms1024m -Xmx1024m \
             -XX:MaxMetaspaceSize=512m \
             -Xmn1500M \
             -XX:+UseConcMarkSweepGC -XX:+CMSParallelRemarkEnabled \
