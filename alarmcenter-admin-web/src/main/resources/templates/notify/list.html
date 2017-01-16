@@ -17,7 +17,8 @@
         <div class="panel-body">
             <div class="col-lg-12">
                 <div class="input-group">
-                    <select class="selectpicker show-tick form-control" data-live-search="true" data-width="280px" id="appId" name="appId" th:remove="all-but-first">
+                    <select class="selectpicker show-tick form-control" data-live-search="true" data-width="280px"
+                            id="appId" name="appId" th:remove="all-but-first">
                         <option th:each="entry : ${appIdMap.entrySet()}"
                                 th:value="${entry.key}" th:text="${entry.value}"
                                 th:selected="${#strings.equals(#httpServletRequest.getParameter('appId'),entry.key)}"></option>
@@ -62,17 +63,17 @@
             <th width="100">类型</th>
             <th width="150">接收者</th>
             <th width="100">内容</th>
-            <th width="100">状态</th>
+            <th width="50">状态</th>
         </tr>
         </thead>
         <tbody th:remove="all-but-first">
         <tr th:each="notify:${list}" th:id="${notify.id}">
-            <td th:text="${notify.appId}"></td>
-            <td th:text="${notify.recordShowTime}"></td>
-            <td th:text="${notify.notifyType}==1?'短信':'邮件'"></td>
-            <td th:text="${notify.nofityTo}"></td>
-            <td th:text="${notify.content}"></td>
-            <td th:text="${notify.recordStatus}==1?'成功':'失败'"></td>
+            <td style="word-break: break-all; word-wrap:break-word;" th:text="${notify.appId}"></td>
+            <td style="word-break: break-all; word-wrap:break-word;" th:text="${notify.recordShowTime}"></td>
+            <td style="word-break: break-all; word-wrap:break-word;" th:text="${notify.notifyType}==1?'短信':'邮件'"></td>
+            <td style="word-break: break-all; word-wrap:break-word;" th:text="${notify.nofityTo}"></td>
+            <td style="word-break: break-all; word-wrap:break-word;" th:text="${notify.content}"></td>
+            <td style="word-break: break-all; word-wrap:break-word;" th:text="${notify.recordStatus}==1?'成功':'失败'"></td>
         </tr>
         </tbody>
     </table>

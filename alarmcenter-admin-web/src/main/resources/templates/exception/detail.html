@@ -18,7 +18,8 @@
             <table class="table">
                 <tr>
                     <td width="250">应用编号:</td>
-                    <td><span th:text="${errorLog.appId}"></span></td>
+                    <td style="word-break: break-all; word-wrap:break-word;"><span th:text="${errorLog.appId}"></span>
+                    </td>
                 </tr>
 
                 <tr>
@@ -27,22 +28,25 @@
                 </tr>
                 <tr>
                     <td>报错Url</td>
-                    <td><span th:text="${errorLog.reqUrl}"></span></td>
+                    <td style="word-break: break-all; word-wrap:break-word;"><span th:text="${errorLog.reqUrl}"></span>
+                    </td>
                 </tr>
                 <tr>
                     <td>Form请求</td>
-                    <td>
+                    <td style="word-break: break-all; word-wrap:break-word;">
                         <span th:text="${errorLog.reqForm}"></span>
                     </td>
                 </tr>
                 <tr>
                     <td>报错请求头信息</td>
-                    <td><span th:text="${errorLog.header}"></span></td>
+                    <td style="word-break: break-all; word-wrap:break-word;"><span th:text="${errorLog.header}"></span>
+                    </td>
                 </tr>
 
                 <tr>
                     <td>报错服务器Ip</td>
-                    <td><span th:text="${errorLog.machineIp}"></span></td>
+                    <td style="word-break: break-all; word-wrap:break-word;"><span
+                            th:text="${errorLog.machineIp}"></span></td>
                 </tr>
 
                 <tr>
@@ -51,29 +55,34 @@
                 </tr>
                 <tr>
                     <td>报错方法名</td>
-                    <td><span th:text="${errorLog.methodName}"></span></td>
+                    <td style="word-break: break-all; word-wrap:break-word;"><span
+                            th:text="${errorLog.methodName}"></span></td>
                 </tr>
                 <tr>
                     <td>报错方法命名空间</td>
-                    <td><span th:text="${errorLog.assemblyName}"></span></td>
+                    <td style="word-break: break-all; word-wrap:break-word;"><span
+                            th:text="${errorLog.assemblyName}"></span></td>
                 </tr>
                 <tr>
                     <td>报错异常类型</td>
-                    <td><span th:text="${errorLog.exceptionName}"></span></td>
+                    <td style="word-break: break-all; word-wrap:break-word;"><span
+                            th:text="${errorLog.exceptionName}"></span></td>
                 </tr>
                 <tr>
                     <td>报错标题</td>
-                    <td><span th:text="${errorLog.title}"></span></td>
+                    <td style="word-break: break-all; word-wrap:break-word;"><span th:text="${errorLog.title}"></span>
+                    </td>
                 </tr>
 
                 <tr>
                     <td>报错信息</td>
-                    <td><span th:text="${errorLog.message}"></span></td>
+                    <td style="word-break: break-all; word-wrap:break-word;"><span th:text="${errorLog.message}"></span>
+                    </td>
                 </tr>
 
                 <tr>
                     <td>报错堆栈信息</td>
-                    <td>
+                    <td style="word-break: break-all; word-wrap:break-word;">
                         <div style="color:#F00" th:text="${errorLog.stackTrace}"></div>
                     </td>
                 </tr>
