@@ -69,11 +69,11 @@
         <tbody th:remove="all-but-first">
         <tr th:each="notify:${list}" th:id="${notify.id}">
             <td style="word-break: break-all; word-wrap:break-word;" th:text="${notify.appId}"></td>
-            <td style="word-break: break-all; word-wrap:break-word;" th:text="${notify.recordShowTime}"></td>
+            <td style="word-break: break-all; word-wrap:break-word;" th:text="${#dates.format(notify.addTime, 'yyyy-MM-dd HH:mm:ss')}"></td>
             <td style="word-break: break-all; word-wrap:break-word;" th:text="${notify.notifyType}==1?'短信':'邮件'"></td>
             <td style="word-break: break-all; word-wrap:break-word;" th:text="${notify.nofityTo}"></td>
             <td style="word-break: break-all; word-wrap:break-word;" th:text="${notify.content}"></td>
-            <td style="word-break: break-all; word-wrap:break-word;" th:text="${notify.recordStatus}==1?'成功':'失败'"></td>
+            <td style="word-break: break-all; word-wrap:break-word;" th:text="${notify.notifyStatus}==1?'成功':'失败'"></td>
         </tr>
         </tbody>
     </table>
