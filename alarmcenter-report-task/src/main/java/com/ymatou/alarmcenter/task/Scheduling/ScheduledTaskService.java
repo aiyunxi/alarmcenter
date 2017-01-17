@@ -32,7 +32,7 @@ public class ScheduledTaskService {
     /**
      * 每分钟执行一次异常报警处理程序
      */
-    @Scheduled(fixedRate = 6000)
+    @Scheduled(fixedRate = 60000)
     public void work() {
         try {
             ResourceBundle disconf = ResourceBundle.getBundle("disconf");
