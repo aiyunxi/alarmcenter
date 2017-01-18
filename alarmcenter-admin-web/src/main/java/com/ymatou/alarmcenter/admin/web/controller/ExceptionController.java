@@ -103,7 +103,7 @@ public class ExceptionController {
             if (config == null)
                 continue;
             long count = appErrorLogRepository.getErrorCount(config.getAppId(), AppErrorLevel.Error.getCode(), now.minusHours(1).toDate(), now.toDate());
-            countMap.put(config.getAppId(), count);
+            countMap.put(config.getAppId().replace(".ymatou.com",""), count);
         }
         return sortMap(countMap, 10);
     }

@@ -19,6 +19,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
 
+import java.util.Date;
+
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
@@ -52,6 +54,10 @@ public class ConfigController {
         appBaseConfig = new AppBaseConfig();
         AppErrorConfig appErrorConfig = new AppErrorConfig();
         ConvertUtils.toAppBaseConfigAndAppErrorConfig(model, appBaseConfig, appErrorConfig);
+        appBaseConfig.setLastUpdateDatetime(new Date());
+        appErrorConfig.setLastUpdateDatetime(new Date());
+        appErrorConfig.setLastEmailHandleTime(new Date());
+        appErrorConfig.setLastSmsHandleTime(new Date());
         appBaseConfigRepository.saveAppBaseConfig(appBaseConfig);
         appErrorConfigRepository.saveAppErrorConfig(appErrorConfig);
         return new AlertDialog("操作成功！", "/config/list");
@@ -76,6 +82,14 @@ public class ConfigController {
             throw new RuntimeException(String.format("应用编号为：%s 的记录不存在！", model.getAppId()));
         AppErrorConfig appErrorConfig = appErrorConfigRepository.getAppErrorConfigByAppId(model.getAppId());
         ConvertUtils.toAppBaseConfigAndAppErrorConfig(model, appBaseConfig, appErrorConfig);
+        if (appBaseConfig != null && appBaseConfig.getLastUpdateDatetime() == null)
+            appBaseConfig.setLastUpdateDatetime(new Date());
+        if (appErrorConfig != null && appErrorConfig.getLastUpdateDatetime() == null)
+            appErrorConfig.setLastUpdateDatetime(new Date());
+        if (appErrorConfig != null && appErrorConfig.getLastEmailHandleTime() == null)
+            appErrorConfig.setLastEmailHandleTime(new Date());
+        if (appErrorConfig != null && appErrorConfig.getLastSmsHandleTime() == null)
+            appErrorConfig.setLastSmsHandleTime(new Date());
         appBaseConfigRepository.saveAppBaseConfig(appBaseConfig);
         appErrorConfigRepository.saveAppErrorConfig(appErrorConfig);
         return new AlertDialog("操作成功！", "/config/list");

@@ -133,6 +133,8 @@ public class ErrorLogService {
         int sendSmsTimeInterval = appErrorConfig.getSendSmsTimeInterval() <= 0 ? businessConfig.getDefaultSendSmsNumLimit() : appErrorConfig.getSendSmsTimeInterval();
         int intSendSmsNumLimit = appErrorConfig.getSendSmsNumLimit() <= 0 ? businessConfig.getDefaultSendSmsNumLimit() : appErrorConfig.getSendSmsNumLimit();
         DateTime currentTime = new DateTime();
+        if (appErrorConfig.getLastSmsHandleTime() == null)
+            appErrorConfig.setLastSmsHandleTime(new DateTime(1900, 1, 1, 0, 0, 0).toDate());
         DateTime lastSmsHandleTime = new DateTime(appErrorConfig.getLastSmsHandleTime());
         if (currentTime.isAfter(lastSmsHandleTime.plusMinutes(sendSmsTimeInterval))) {
             //处理发送短信逻辑
@@ -159,6 +161,8 @@ public class ErrorLogService {
         int intSendEmailTimeInterval = appErrorConfig.getSendEmailTimeInterval() <= 0 ? businessConfig.getDefaultSendEmailTimeInterval() : appErrorConfig.getSendEmailTimeInterval();
         int intSendEmailNumLimit = appErrorConfig.getSendEmailNumLimit() <= 0 ? businessConfig.getDefaultSendEmailNumLimit() : appErrorConfig.getSendEmailNumLimit();
         DateTime currentTime = new DateTime();
+        if (appErrorConfig.getLastEmailHandleTime() == null)
+            appErrorConfig.setLastEmailHandleTime(new DateTime(1900, 1, 1, 0, 0, 0).toDate());
         DateTime lastEmailHandleTime = new DateTime(appErrorConfig.getLastEmailHandleTime());
         if (currentTime.isAfter(lastEmailHandleTime.plusMinutes(intSendEmailTimeInterval))) {
             //处理Email发送逻辑
