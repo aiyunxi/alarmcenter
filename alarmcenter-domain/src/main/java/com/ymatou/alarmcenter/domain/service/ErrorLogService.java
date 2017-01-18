@@ -200,7 +200,7 @@ public class ErrorLogService {
             exception = ex;
             logger.error("sendSmsError", ex);
         } finally {
-            saveNotifyRecordInfo(appId, sbTitle.toString(), sendSmsAddress, 2, exception);
+            saveNotifyRecordInfo(appId, sbTitle.toString(), sendSmsAddress, 1, exception);
         }
     }
 
@@ -246,7 +246,7 @@ public class ErrorLogService {
             exception = ex;
             logger.error("sendEmailError", ex);
         } finally {
-            saveNotifyRecordInfo(appId, sbTitle.toString(), sendMailAddress, 1, exception);
+            saveNotifyRecordInfo(appId, sbTitle.toString(), sendMailAddress, 2, exception);
         }
     }
 
