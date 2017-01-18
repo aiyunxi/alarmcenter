@@ -46,10 +46,19 @@ public class ExceptionController {
         AppErrorLog appErrorLog = appErrorLogRepository.getAppErrLog(date, id);
         if (appErrorLog == null)
             appErrorLog = new AppErrorLog();
+        appErrorLog.setHeader(replaceEnter(appErrorLog.getHeader()));
+        appErrorLog.setReqForm(replaceEnter(appErrorLog.getReqForm()));
+        appErrorLog.setStackTrace(replaceEnter(appErrorLog.getStackTrace()));
         modelAndView.addObject("errorLog", appErrorLog);
         AppErrorLevel errorLevel = AppErrorLevel.getByCode(appErrorLog.getErrorLevel());
         modelAndView.addObject("errorLevel", errorLevel);
         return modelAndView;
+    }
+
+    private String replaceEnter(String input) {
+        if (StringUtils.isBlank(input))
+            return input;
+        return input.replace("\r\n", "<br/>").replace("\r", "<br/>").replace("\n", "<br/>");
     }
 
     @RequestMapping(value = "/chart", method = GET)

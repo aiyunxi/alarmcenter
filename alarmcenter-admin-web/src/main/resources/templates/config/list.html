@@ -54,7 +54,7 @@
         <tr th:each="config:${list}" th:id="${config.id}">
             <td style="word-break: break-all; word-wrap:break-word;">
                 <a th:href="|javascript:showDetail('${config.appId}');|"
-                   th:text="${config.appId}"></a>
+                   th:text="${config.appId}" target="_blank"></a>
             </td>
 
             <td style="word-break: break-all; word-wrap:break-word;" th:text="${config.emailTo}"></td>
@@ -94,8 +94,7 @@
 
     function showDetail(appId) {
         var url = '/config/detail?appId=' + appId;
-        loadPage(url);
-        //alert(appId);
+        window.open(url);
     }
 
     function editRecord(appId) {

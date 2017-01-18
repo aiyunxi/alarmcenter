@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class DefaultController {
     @RequestMapping("/version")
     public String version() {
-        return "2017-01-17.1";
+        return "2017-01-18.1";
     }
 
     @RequestMapping("/warmup")
