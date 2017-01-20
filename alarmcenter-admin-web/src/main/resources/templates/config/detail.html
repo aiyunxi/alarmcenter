@@ -39,7 +39,10 @@
                     <td>错误短信设置</td>
                     <td><span th:text="|${sendSmsTimeInterval}分钟出现${sendSmsNumLimit}次|"></span></td>
                 </tr>
-
+                <tr>
+                    <td>异常白名单</td>
+                    <td th:text="${whitelist}"></td>
+                </tr>
             </table>
         </div>
 

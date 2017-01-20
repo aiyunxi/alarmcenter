@@ -16,6 +16,7 @@ public class ConvertUtils {
             configModel.setAppId(appBaseConfig.getAppId());
             configModel.setEmails(appBaseConfig.getEmailTo());
             configModel.setMobiles(appBaseConfig.getPhoneNumber());
+            configModel.setWhitelist(appBaseConfig.getWhitelist());
         }
         if (appErrorConfig != null) {
             configModel.setAppId(appErrorConfig.getAppId());
@@ -31,6 +32,7 @@ public class ConvertUtils {
         appBaseConfig.setAppId(model.getAppId());
         appBaseConfig.setEmailTo(model.getEmails());
         appBaseConfig.setPhoneNumber(model.getMobiles());
+        appBaseConfig.setWhitelist(model.getWhitelist());
         appBaseConfig.setLastUpdateDatetime(new DateTime().toDate());
         appErrorConfig.setAppId(model.getAppId());
         appErrorConfig.setSendSmsNumLimit(model.getSendSmsNumLimit());

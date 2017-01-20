@@ -62,10 +62,12 @@ public class ErrorLogService {
             String content = title + message;
             if (StringUtils.isBlank(appId) || StringUtils.isBlank(content))
                 return false;
-            String words = whitelistConfig.getValue(appId);
-            if (StringUtils.isBlank(words))
+            //String words = whitelistConfig.getValue(appId);
+            AppBaseConfig appBaseConfig = appBaseConfigRepository.getAppBaseConfigByAppId(appId);
+
+            if (appBaseConfig == null || StringUtils.isBlank(appBaseConfig.getWhitelist()))
                 return false;
-            String[] array = StringUtils.split(words, ",");
+            String[] array = StringUtils.split(appBaseConfig.getWhitelist(), ",");
             if (array == null || array.length <= 0)
                 return false;
             for (int i = 0; i < array.length; i++) {

@@ -143,6 +143,7 @@ public class ConfigController {
         modelAndView.addObject("emailTo", appBaseConfig.getEmailTo());
         modelAndView.addObject("phoneNumber", appBaseConfig.getPhoneNumber());
         modelAndView.addObject("lastUpdateDatetime", appBaseConfig.getLastUpdateDatetime());
+        modelAndView.addObject("whitelist", appBaseConfig.getWhitelist());
         if (appErrorConfig != null) {
             modelAndView.addObject("sendEmailTimeInterval", appErrorConfig.getSendEmailTimeInterval());
             modelAndView.addObject("sendEmailNumLimit", appErrorConfig.getSendEmailNumLimit());

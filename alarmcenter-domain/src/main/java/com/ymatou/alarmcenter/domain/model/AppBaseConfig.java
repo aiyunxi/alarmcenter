@@ -8,7 +8,7 @@ import java.util.Date;
 /**
  * Created by zhangxiaoming on 2016/11/23.
  */
-@Entity(value = "AppBaseConfig",noClassnameStored = true)
+@Entity(value = "AppBaseConfig", noClassnameStored = true)
 public class AppBaseConfig {
     @Id
     private ObjectId id;
@@ -21,6 +21,17 @@ public class AppBaseConfig {
     private String phoneNumber;
     @Property("LastUpdateDatetime")
     private Date lastUpdateDatetime;
+
+    @Property("Whitelist")
+    private String whitelist;
+
+    public String getWhitelist() {
+        return whitelist;
+    }
+
+    public void setWhitelist(String whitelist) {
+        this.whitelist = whitelist;
+    }
 
     public ObjectId getId() {
         return id;

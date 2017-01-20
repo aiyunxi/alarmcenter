@@ -7,6 +7,7 @@ public class ConfigModel {
     private String appId;
     private String emails;
     private String mobiles;
+    private String whitelist;
     private int sendEmailTimeInterval;
     private int sendEmailNumLimit;
     private int sendSmsTimeInterval;
@@ -66,5 +67,13 @@ public class ConfigModel {
 
     public void setMobiles(String mobiles) {
         this.mobiles = mobiles;
+    }
+
+    public String getWhitelist() {
+        return whitelist;
+    }
+
+    public void setWhitelist(String whitelist) {
+        this.whitelist = whitelist;
     }
 }
