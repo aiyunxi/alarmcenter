@@ -72,10 +72,12 @@ public class ErrorLogService {
                 return false;
             for (int i = 0; i < array.length; i++) {
                 String word = array[i];
-                if (StringUtils.isBlank(word))
+                if (StringUtils.isBlank(word)){
                     continue;
-                if (content.contains(word))
+                }
+                if (StringUtils.containsIgnoreCase(content,word)){
                     return true;
+                }
             }
             return false;
         } catch (Exception ex) {
