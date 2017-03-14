@@ -58,6 +58,9 @@ public class AlarmResourceImpl implements AlarmResource {
     @Path("/{Alarm:(?i:Alarm)}/{SaveSingle:(?i:SaveSingle)}")
     @Override
     public SaveSingleResponse saveSingle(@Form SaveSingleFormRequest request) {
+        if(StringUtils.isBlank(request.getAppId())){
+            return new SaveSingleResponse();
+        }
         SaveSingleRequest saveSingleRequest = new SaveSingleRequest();
         saveSingleRequest.setAppId(request.getAppId().toLowerCase());
         saveSingleRequest.setMessage(request.getMessage());

@@ -36,7 +36,7 @@ public class CustomExceptionMapper implements ExceptionMapper<Throwable> {
 
         HttpServletRequest request = ResteasyProviderFactory.getContextData(HttpServletRequest.class);
         LOGGER.error("exception:{},clientIp:{},req:{},header:{}", new Object[] {exception.toString(), getIp(request),
-                DynamicTraceInterceptor.getRequest(), getHeaders(request),});
+                DynamicTraceInterceptor.getRequest(), getHeaders(request)});
 
         if (exception instanceof JsonMappingException || exception instanceof JsonParseException) {
             return Response.status(Response.Status.BAD_REQUEST).entity(exception.getMessage()).type("text/plain")
