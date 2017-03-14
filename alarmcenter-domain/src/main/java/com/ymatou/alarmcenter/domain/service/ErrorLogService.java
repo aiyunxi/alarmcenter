@@ -51,15 +51,16 @@ public class ErrorLogService {
     public void saveAppErrLog(AppErrorLog appErrLog) {
         if (appErrLog == null)
             return;
-        boolean flag = isInWhitelist(appErrLog.getAppId(), appErrLog.getTitle(), appErrLog.getMessage());
+        boolean flag = isInWhitelist(appErrLog.getAppId(), appErrLog.getTitle(), appErrLog.getMessage(),
+                appErrLog.getStackTrace(), appErrLog.getExceptionName());
         if (flag)
             return;
         appErrLogRepository.saveAppErrLog(appErrLog);
     }
 
-    private boolean isInWhitelist(String appId, String title, String message) {
+    private boolean isInWhitelist(String appId, String title, String message, String stackTrace, String exceptionName) {
         try {
-            String content = title + message;
+            String content = title + message + stackTrace + exceptionName;
             if (StringUtils.isBlank(appId) || StringUtils.isBlank(content))
                 return false;
             //String words = whitelistConfig.getValue(appId);
@@ -67,7 +68,7 @@ public class ErrorLogService {
 
             if (appBaseConfig == null || StringUtils.isBlank(appBaseConfig.getWhitelist()))
                 return false;
-            String[] array = StringUtils.split(appBaseConfig.getWhitelist(), ",");
+            String[] array = StringUtils.split(appBaseConfig.getWhitelist(), "[,]");
             if (array == null || array.length <= 0)
                 return false;
             for (int i = 0; i < array.length; i++) {

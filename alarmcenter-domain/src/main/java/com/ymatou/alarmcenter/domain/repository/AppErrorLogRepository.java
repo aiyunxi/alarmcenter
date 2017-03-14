@@ -124,14 +124,14 @@ public class AppErrorLogRepository extends MongoRepository {
         Query<AppErrorLog> query = newQuery(AppErrorLog.class, dbName, collectionName, ReadPreference.secondaryPreferred());
         ArrayList<Criteria> conditions = new ArrayList<>();
         if (!StringUtils.isBlank(appId))
-            conditions.add(query.criteria("AppId").equalIgnoreCase(appId));
+            conditions.add(query.criteria("AppId").equal(appId));
         if (errorLevel != null)
             conditions.add(query.criteria("ErrorLevel").equal(errorLevel));
         if (!StringUtils.isBlank(machineIp)) {
             conditions.add(query.criteria("MachineIp").equal(machineIp));
         }
         if (!StringUtils.isBlank(keyWord)) {
-            conditions.add(query.criteria("Message").containsIgnoreCase(keyWord));
+            conditions.add(query.criteria("StackTrace").contains(keyWord));
         }
         if (beginTime != null) {
             DateTime dt = new DateTime(beginTime);

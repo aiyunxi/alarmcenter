@@ -11,6 +11,9 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.ResourceBundle;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by zhangxiaoming on 2016/11/29.
@@ -18,6 +21,12 @@ import java.util.ResourceBundle;
 @Service
 public class ScheduledTaskService {
     private static final Logger logger = LoggerFactory.getLogger(ScheduledTaskService.class);
+    private static ScheduledExecutorService scheduExec = Executors.newScheduledThreadPool(5);
+
+    public ScheduledTaskService() {
+        scheduExec.scheduleWithFixedDelay(() -> work(), 0, 60, TimeUnit.SECONDS);
+    }
+
     @Resource
     private ErrorLogService errorLogService;
 
@@ -32,7 +41,7 @@ public class ScheduledTaskService {
     /**
      * 每分钟执行一次异常报警处理程序
      */
-    @Scheduled(fixedRate = 60000)
+    //@Scheduled(fixedRate = 60000)
     public void work() {
         try {
             ResourceBundle disconf = ResourceBundle.getBundle("disconf");
