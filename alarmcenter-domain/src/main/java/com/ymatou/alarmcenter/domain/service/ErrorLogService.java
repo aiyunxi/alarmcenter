@@ -61,16 +61,19 @@ public class ErrorLogService {
     private boolean isInWhitelist(String appId, String title, String message, String stackTrace, String exceptionName) {
         try {
             String content = title + message + stackTrace + exceptionName;
-            if (StringUtils.isBlank(appId) || StringUtils.isBlank(content))
+            if (StringUtils.isBlank(appId) || StringUtils.isBlank(content)){
                 return false;
-            //String words = whitelistConfig.getValue(appId);
+            }
+//            String words = whitelistConfig.getValue(appId);
             AppBaseConfig appBaseConfig = appBaseConfigRepository.getAppBaseConfigByAppId(appId);
 
-            if (appBaseConfig == null || StringUtils.isBlank(appBaseConfig.getWhitelist()))
+            if (appBaseConfig == null || StringUtils.isBlank(appBaseConfig.getWhitelist())){
                 return false;
+            }
             String[] array = StringUtils.split(appBaseConfig.getWhitelist(), "[,]");
-            if (array == null || array.length <= 0)
+            if (array == null || array.length <= 0){
                 return false;
+            }
             for (int i = 0; i < array.length; i++) {
                 String word = array[i];
                 if (StringUtils.isBlank(word)){
