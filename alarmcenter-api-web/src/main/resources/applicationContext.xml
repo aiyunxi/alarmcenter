@@ -112,7 +112,10 @@
                    ref="alarmFacade" protocol="dubbo"/>
 
     <dubbo:protocol name="rest" server="servlet" port="${rest.port}"
-                    extension="com.ymatou.alarmcenter.facade.common.JacksonConfig"/>
+                    extension="com.ymatou.alarmcenter.facade.common.JacksonConfig,
+                    com.ymatou.alarmcenter.facade.common.DynamicTraceBinding,
+                    com.ymatou.alarmcenter.facade.common.CustomExceptionMapper,
+                    "/>
 
     <dubbo:service interface="com.ymatou.alarmcenter.facade.rest.AlarmResource"
                    ref="alarmResource" protocol="rest"/>
